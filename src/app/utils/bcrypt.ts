@@ -1,6 +1,6 @@
 import { compare, hash } from "bcrypt";
 
-const BCRYPT_ROUNDS = 17;
+const BCRYPT_ROUNDS = 3;
 
 export const encrypt = async (plainText: string) => {
 	const hashed = await hash(plainText, BCRYPT_ROUNDS);

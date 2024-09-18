@@ -20,8 +20,8 @@ export default function Navbar() {
 								alt="Logo"
 								className="lg:w-[40px] w-[30px] mr-2"
 							/>
-							<span className="text-primary">Coffee</span>
-							<span className="text-secondary"> Sek</span>
+							<span className="text-primary unselectable">Coffee</span>
+							<span className="text-secondary unselectable"> Sek</span>
 						</a>
 					</div>
 					<div className="flex items-center">
