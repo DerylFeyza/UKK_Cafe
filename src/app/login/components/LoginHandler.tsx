@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 export default function LoginForm() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
-	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -18,7 +16,7 @@ export default function LoginForm() {
 				redirect: false,
 			});
 			if (!result?.error) {
-				router.push("/");
+				window.location.reload();
 			} else {
 				console.log(result);
 				setErrorMessage("Incorrect Email or Password");
