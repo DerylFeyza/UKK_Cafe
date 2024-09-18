@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-	const { data: session } = useSession(); // Get session info
+	const { data: session } = useSession();
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -22,7 +22,7 @@ export default function LoginForm() {
 		if (result?.error) {
 			setError("Invalid username or password");
 		} else {
-			router.push("/"); // Redirect to dashboard or desired page
+			router.push("/");
 		}
 	};
 
@@ -37,6 +37,12 @@ export default function LoginForm() {
 					className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none"
 				>
 					Go to Dashboard
+				</button>
+				<button
+					onClick={() => signOut()}
+					className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none"
+				>
+					Log Out
 				</button>
 			</div>
 		);

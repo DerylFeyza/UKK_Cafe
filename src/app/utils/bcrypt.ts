@@ -9,6 +9,5 @@ export const encrypt = async (plainText: string) => {
 
 export const compareHash = async (plainText: string, cipherText: string) => {
 	const comparation = await compare(plainText, cipherText);
-	console.log(comparation);
 	return comparation;
 };

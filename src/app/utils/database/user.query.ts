@@ -10,6 +10,19 @@ export const findUser = async (where: Prisma.UserWhereUniqueInput) => {
 };
 
 export const createUser = async (data: Prisma.UserCreateInput) => {
-	console.log(data);
 	return await prisma.user.create({ data });
+};
+
+export const updateUser = async (
+	where: Prisma.UserWhereUniqueInput,
+	data: Prisma.UserUpdateInput
+) => {
+	return await prisma.user.update({
+		where,
+		data,
+	});
+};
+
+export const deleteUser = async (where: Prisma.UserWhereUniqueInput) => {
+	return await prisma.user.delete({ where });
 };

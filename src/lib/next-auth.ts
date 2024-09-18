@@ -52,7 +52,6 @@ export const authOptions: AuthOptions = {
 
 					return payload;
 				} catch (error) {
-					console.error(error);
 					return null;
 				}
 			},
@@ -60,7 +59,6 @@ export const authOptions: AuthOptions = {
 	],
 	callbacks: {
 		async jwt({ token, user }) {
-			console.log(token);
 			if (user?.username) {
 				const userdb = await findUser({ username: user.username });
 				if (!userdb) return token;

@@ -56,8 +56,8 @@ export default function UserForm() {
 				>
 					<option value="">Select Role</option>
 					<option value="admin">Admin</option>
-					<option value="kasir">User</option>
-					<option value="manajer">User</option>
+					<option value="kasir">Kasir</option>
+					<option value="manajer">Manajer</option>
 				</select>
 			</div>
 			<div className="mb-4">
