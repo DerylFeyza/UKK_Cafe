@@ -10,7 +10,7 @@ export default function Navbar() {
 	const loading = status === "loading";
 
 	return (
-		<nav className="bg-background fixed top-0 left-0 w-full">
+		<nav className="bg-background fixed top-0 left-0 w-full z-50">
 			<div className="max-w-7xl mx-auto px-4">
 				<div className="flex justify-between h-16">
 					<div className="flex items-center">

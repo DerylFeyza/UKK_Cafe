@@ -22,6 +22,8 @@ export default withAuth(function middleware(req) {
 			status: 403,
 		});
 	}
+
+	return NextResponse.next();
 });
 
 export const config = {

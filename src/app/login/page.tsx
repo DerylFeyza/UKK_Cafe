@@ -1,15 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { signIn, useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams, redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function LoginForm() {
-	const { data: session } = useSession();
+	const { status } = useSession();
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const callbackUrl = searchParams.get("callbackUrl") || "/";
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
+
+	if (status === "authenticated") return redirect("/");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -17,7 +21,8 @@ export default function LoginForm() {
 			const result = await signIn("credentials", {
 				username,
 				password,
-				redirect: false,
+				redirect: true,
+				callbackUrl,
 			});
 
 			if (!result?.error) {
@@ -29,30 +34,6 @@ export default function LoginForm() {
 			setErrorMessage("Error logging in: " + (error as Error).message);
 		}
 	};
-
-	if (session?.user?.username) {
-		return (
-			<div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-tertiary to-background">
-				<div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
-					<h2 className="text-2xl font-bold mb-6 text-center text-secondary">
-						Welcome, {session?.user?.username}!
-					</h2>
-					<button
-						onClick={() => router.push("/")}
-						className="w-full py-2 px-4 bg-primary text-white font-medium rounded-md hover:bg-secondary hover:text-white focus:outline-none mb-4 transition duration-300 ease-in-out"
-					>
-						Go to Dashboard
-					</button>
-					<button
-						onClick={() => signOut()}
-						className="w-full py-2 px-4 bg-primary text-white font-medium rounded-md hover:bg-secondary hover:text-white focus:outline-none transition duration-300 ease-in-out"
-					>
-						Log Out
-					</button>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-tertiary to-background">
