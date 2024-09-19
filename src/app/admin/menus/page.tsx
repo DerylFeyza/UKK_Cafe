@@ -11,13 +11,13 @@ export default async function Menus() {
 						{menus &&
 							menus.map((menu, index) => (
 								<div className="pb-4 pl-2 pr-2" key={index}>
-									<MenuCard menuData={menu} />
+									<MenuCard menuData={menu} path={"admin"} />
 								</div>
 							))}
 					</div>
 				</div>
 
-				<div className="w-[30%] max-h-[82vh] overflow-y-auto">
+				<div className="w-[30%] max-h-[82vh] overflow-y-auto pr-5">
 					<AddMenuForm />
 				</div>
 			</div>

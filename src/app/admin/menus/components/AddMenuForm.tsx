@@ -88,7 +88,7 @@ export default function AddMenuForm() {
 							className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 							required
 						>
-							<option value="">Select Jenis</option>
+							<option value="">Pilih Jenis</option>
 							<option value="makanan">Makanan</option>
 							<option value="minuman">Minuman</option>
 						</select>
@@ -136,7 +136,7 @@ export default function AddMenuForm() {
 						<div className="flex items-center">
 							<label
 								htmlFor="gambar"
-								className="cursor-pointer bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors duration-300"
+								className="cursor-pointer px-4 py-2 rounded-md button-transition"
 							>
 								Browse
 							</label>
@@ -169,7 +169,7 @@ export default function AddMenuForm() {
 
 					<button
 						type="submit"
-						className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+						className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
 					>
 						Submit
 					</button>

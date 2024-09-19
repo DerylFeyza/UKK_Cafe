@@ -19,6 +19,6 @@ export const handleImageUpload = async (file: File): Promise<string> => {
 };
 
 export const handleImageDelete = async (filename: string): Promise<void> => {
-	const filePath = path.join(process.cwd(), "public/uploads/", filename);
+	const filePath = path.join(process.cwd(), "public/menu/", filename);
 	await unlink(filePath);
 };

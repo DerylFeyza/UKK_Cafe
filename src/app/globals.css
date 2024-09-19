@@ -7,6 +7,28 @@
 	border-radius: 4px;
 }
 
+.button-transition {
+	background-color: #ff902a;
+	color: white;
+	align-items: center;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.button-transition:hover {
+	background-color: #2f2105;
+}
+
+.button-transition-secondary {
+	background-color: #2f2105;
+	color: white;
+	align-items: center;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.button-transition-secondary:hover {
+	background-color: #ff902a;
+}
+
 .unselectable {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
@@ -29,28 +51,29 @@ div {
 	@apply font-semibold text-lg text-secondary hover:text-primary transition duration-300;
 }
 
-/* Custom scrollbar */
+/* Base styles for scrollbar */
 ::-webkit-scrollbar {
 	width: 6px; /* Width of the scrollbar */
 }
 
 /* Scrollbar track */
 ::-webkit-scrollbar-track {
-	background-color: #f6ebda; /* background */
+	background-color: #f6ebda; /* Background */
 }
 
 /* Scrollbar handle */
 ::-webkit-scrollbar-thumb {
-	background-color: #ff902a; /* primary */
+	background-color: #ff902a; /* Primary */
 	border-radius: 6px;
+	transition: background-color 0.3s ease; /* Transition effect */
 }
 
 /* Scrollbar handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background-color: #2f2105; /* secondary */
+	background-color: #2f2105; /* Secondary */
 }
 
 /* Optional: Scrollbar corner */
 ::-webkit-scrollbar-corner {
-	background-color: #f9d9aa; /* tertiary */
+	background-color: #f9d9aa; /* Tertiary */
 }
