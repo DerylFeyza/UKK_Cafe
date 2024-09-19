@@ -29,7 +29,13 @@ export default function DetailModal({
 	const [file, setFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-	const toggleModal = () => setIsModalOpen(!isModalOpen);
+	const toggleModal = () => {
+		setNamaMenu(initialData.nama_menu);
+		setDeskripsi(initialData.deskripsi);
+		setHarga(initialData.harga);
+		setJenis(initialData.jenis);
+		setIsModalOpen(!isModalOpen);
+	};
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
@@ -51,6 +57,10 @@ export default function DetailModal({
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
 		if (e.target === e.currentTarget) {
+			setNamaMenu(initialData.nama_menu);
+			setDeskripsi(initialData.deskripsi);
+			setHarga(initialData.harga);
+			setJenis(initialData.jenis);
 			setIsModalOpen(false);
 			setImagePreview(null);
 		}
