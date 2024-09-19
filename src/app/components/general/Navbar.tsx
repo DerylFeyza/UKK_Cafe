@@ -25,20 +25,39 @@ export default function Navbar() {
 						</a>
 					</div>
 					<div className="flex items-center">
+						{session ? (
+							session.user?.role === "admin" ? (
+								<div className="flex space-x-10">
+									<Link href="/admin/users" className="link-button">
+										<button className="unselectable">Users</button>
+									</Link>
+									<Link href="/admin/menus" className="link-button">
+										<button className="unselectable">Menus</button>
+									</Link>
+								</div>
+							) : session.user?.role === "kasir" ? (
+								<Link href="/kasir/transactions" className="link-button">
+									<button className="unselectable">Manage Transaction</button>
+								</Link>
+							) : session.user?.role === "manajer" ? (
+								<Link href="/manajer/transactions" className="link-button">
+									<button className="unselectable">Transactions</button>
+								</Link>
+							) : null
+						) : null}
+					</div>
+					<div className="flex items-center">
 						{loading ? (
 							<SkeletonLoader />
 						) : session ? (
 							<button
 								onClick={() => signOut()}
-								className="font-semibold text-lg text-secondary hover:text-primary transition duration-300 unselectable"
+								className="link-button unselectable"
 							>
 								Log Out
 							</button>
 						) : (
-							<Link
-								href="/login"
-								className="font-semibold text-lg text-secondary hover:text-primary transition duration-300 "
-							>
+							<Link href="/login" className="link-button ">
 								<button className="unselectable">Login</button>
 							</Link>
 						)}
