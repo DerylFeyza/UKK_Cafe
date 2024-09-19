@@ -19,6 +19,9 @@ model User {
   username  String @unique
   password  String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   Transaksi Transaksi[]
 }
 
@@ -52,6 +55,9 @@ model Menu {
   deskripsi String?
   gambar    String
   harga     Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   DetailTransaksi DetailTransaksi[]
 }

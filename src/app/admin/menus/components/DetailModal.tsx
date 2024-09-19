@@ -2,7 +2,7 @@
 import { X, Upload } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-import { handleUpdateMenu } from "@/app/utils/actions/menu";
+import { handleUpdateMenu, handleDeleteMenu } from "@/app/utils/actions/menu";
 
 interface UpdateData {
 	id_menu: string;
@@ -42,6 +42,7 @@ export default function DetailModal({
 			reader.readAsDataURL(file);
 		} else {
 			setFile(null);
+			setIsModalOpen(false);
 			setImagePreview(null);
 		}
 	};
@@ -55,33 +56,32 @@ export default function DetailModal({
 		}
 	};
 
+	const handleDelete = async (id_menu: string) => {
+		await handleDeleteMenu(id_menu);
+		setIsModalOpen(false);
+	};
+
 	const handleSubmitUpdate = async (e: React.FormEvent) => {
 		e.preventDefault();
-
-		if (!file) {
-			alert("Please upload an image.");
-			return;
-		}
 
 		const formData = new FormData();
 		formData.append("nama_menu", namaMenu);
 		formData.append("jenis", jenis);
 		formData.append("deskripsi", deskripsi!);
 		formData.append("harga", harga);
-		formData.append("gambar", file);
+		if (file) {
+			formData.append("gambar", file);
+		}
 
 		await handleUpdateMenu(initialData.id_menu, formData);
 
-		setNamaMenu("");
-		setJenis("");
-		setDeskripsi("");
-		setHarga("");
+		setIsModalOpen(false);
 		setImagePreview(null);
 		setFile(null);
 	};
 
 	return (
-		<div>
+		<form onSubmit={handleSubmitUpdate}>
 			{isModalOpen && (
 				<div
 					className="fixed inset-0 z-10 bg-black bg-opacity-50 flex items-center justify-center p-4"
@@ -139,10 +139,7 @@ export default function DetailModal({
 								</div>
 							</div>
 							<div className="md:w-1/2 p-6">
-								<form
-									className="h-full flex flex-col"
-									onClick={handleSubmitUpdate}
-								>
+								<div className="h-full flex flex-col">
 									<div className="flex-grow space-y-4">
 										<div className="space-y-1">
 											<label
@@ -222,11 +219,12 @@ export default function DetailModal({
 										<button
 											type="button"
 											className="w-full button-transition font-bold py-2 px-4 rounded-lg"
+											onClick={() => handleDelete(initialData.id_menu)}
 										>
 											Delete Menu
 										</button>
 									</div>
-								</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -245,6 +243,6 @@ export default function DetailModal({
 					}
 				}
 			`}</style>
-		</div>
+		</form>
 	);
 }

@@ -9,6 +9,14 @@ import {
 import { Jenis } from "@prisma/client";
 import { handleImageDelete, handleImageUpload } from "./imageUpload";
 
+interface MenuUpdateData {
+	nama_menu: string;
+	jenis: Jenis;
+	deskripsi: string;
+	harga: number;
+	gambar?: string;
+}
+
 export const handleCreateMenu = async (formData: FormData) => {
 	let namaGambar;
 	const gambar = formData.get("gambar") as File;
@@ -29,24 +37,27 @@ export const handleCreateMenu = async (formData: FormData) => {
 };
 
 export const handleUpdateMenu = async (id: string, formData: FormData) => {
-	let namaGambar;
-	const gambar = formData.get("gambar") as File;
+	let namaGambar: string | undefined;
+	const gambar = formData.get("gambar") as File | null;
 	const menu = await findMenu({ id_menu: id });
 
-	if (menu) {
-		if (menu.gambar) {
+	if (menu && menu.gambar) {
+		if (gambar) {
 			await handleImageDelete(menu.gambar);
+			namaGambar = await handleImageUpload(gambar);
 		}
-		namaGambar = await handleImageUpload(gambar);
 	}
 
-	const menuData = {
+	const menuData: MenuUpdateData = {
 		nama_menu: formData.get("nama_menu") as string,
 		jenis: formData.get("jenis") as Jenis,
 		deskripsi: formData.get("deskripsi") as string,
-		gambar: namaGambar as string,
 		harga: parseInt(formData.get("harga") as string),
 	};
+
+	if (namaGambar) {
+		menuData.gambar = namaGambar;
+	}
 
 	await updateMenu({ id_menu: id }, menuData);
 	revalidatePath("/", "layout");

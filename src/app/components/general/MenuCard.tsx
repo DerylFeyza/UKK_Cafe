@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Menu } from "@prisma/client";
 import TransactionButton from "./MenuCardButtons/TransactionButton";
 import DetailsButton from "./MenuCardButtons/DetailsButton";
-import DetailModal from "./DetailModal";
+import DetailModal from "../../admin/menus/components/DetailModal";
 import { useState } from "react";
 
 export default function MenuCard({

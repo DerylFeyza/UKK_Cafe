@@ -1,9 +1,12 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
-export const getAllMenu = async () => {
-	return await prisma.menu.findMany({});
-};
+export const getAllMenu = async () =>
+	await prisma.menu.findMany({
+		orderBy: {
+			createdAt: "asc",
+		},
+	});
 
 export const findMenu = async (where: Prisma.MenuWhereUniqueInput) => {
 	return await prisma.menu.findUnique({ where });
