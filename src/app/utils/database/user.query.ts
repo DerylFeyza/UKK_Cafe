@@ -2,7 +2,11 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 export const getAllUser = async () => {
-	return await prisma.user.findMany({});
+	return await prisma.user.findMany({
+		orderBy: {
+			createdAt: "asc",
+		},
+	});
 };
 
 export const findUser = async (where: Prisma.UserWhereUniqueInput) => {
