@@ -1,8 +1,7 @@
 "use client";
-import { Search } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import SearchInput from "@/app/components/general/SearchInput";
 export default function FilterLayout({
 	searchData,
 }: {
@@ -23,13 +22,11 @@ export default function FilterLayout({
 	const handleRoleFilter = (role: string) => {
 		const newRole = role === activeRole ? null : role;
 		setActiveRole(newRole);
-
 		const params: URLSearchParams = new URLSearchParams();
 
 		if (searchTerm) {
-			params.set("keyword", searchTerm.toLowerCase());
+			params.set("keyword", searchTerm);
 		}
-
 		if (newRole) {
 			params.set("role", newRole);
 		}
@@ -40,7 +37,7 @@ export default function FilterLayout({
 	const handleSearch = () => {
 		const params: URLSearchParams = new URLSearchParams();
 		if (searchTerm) {
-			params.set("keyword", searchTerm.toLowerCase());
+			params.set("keyword", searchTerm);
 		}
 		if (activeRole) {
 			params.set("role", activeRole);
@@ -50,24 +47,11 @@ export default function FilterLayout({
 
 	return (
 		<div className="flex w-full flex-wrap gap-2 mb-4">
-			<div className="relative w-96">
-				<input
-					type="text"
-					value={searchTerm}
-					onChange={handleSearchChange}
-					placeholder="Search..."
-					className="block w-full px-4 py-2 pl-10 rounded-md border-2 border-tertiary shadow-sm"
-				/>
-				<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-					<Search className="text-secondary h-5 w-5" />
-				</div>
-				<button
-					onClick={handleSearch}
-					className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-1 rounded-md border-2 border-tertiary bg-primary text-white transition duration-300"
-				>
-					Search
-				</button>
-			</div>
+			<SearchInput
+				searchTerm={searchTerm}
+				handleSearchChange={handleSearchChange}
+				handleSearch={handleSearch}
+			/>
 			<div className="w-80 flex space-x-2">
 				<button
 					onClick={() => handleRoleFilter("admin")}

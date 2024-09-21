@@ -37,13 +37,25 @@ export default async function Home() {
 								Start Making Transaction
 							</button>
 						) : session.user?.role === "admin" ? (
-							<div className="flex space-x-4">
-								<button className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out">
+							<div className="flex gap-2 flex-wrap">
+								<Link
+									href="/admin/users"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
 									Manage User
-								</button>
-								<button className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out">
+								</Link>
+								<Link
+									href="/admin/menus"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
 									Manage Menu
-								</button>
+								</Link>
+								<Link
+									href="/admin/mejas"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Manage Meja
+								</Link>
 							</div>
 						) : session.user?.role === "manajer" ? (
 							<button className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out">

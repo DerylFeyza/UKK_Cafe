@@ -45,16 +45,18 @@ export default function MenuCard({
 			<div className="px-6 pb-6 flex justify-between items-center">
 				<span className="font-bold text-xl">Rp. {formatCash}</span>
 				{path === "admin" ? (
-					<DetailsButton setIsModalOpen={setIsModalOpen} />
+					<div>
+						<DetailsButton setIsModalOpen={setIsModalOpen} />
+						<DetailModal
+							isModalOpen={isModalOpen}
+							setIsModalOpen={setIsModalOpen}
+							initialData={menuData}
+						/>
+					</div>
 				) : path === "kasir" ? (
 					<TransactionButton />
 				) : null}
 			</div>
-			<DetailModal
-				isModalOpen={isModalOpen}
-				setIsModalOpen={setIsModalOpen}
-				initialData={menuData}
-			/>
 		</div>
 	);
 }
