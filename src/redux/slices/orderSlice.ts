@@ -56,7 +56,6 @@ const orderSlice = createSlice({
 	},
 });
 
-// Export actions for dispatching
 export const { addItemToOrderList, clearOrderList, updateOrderQuantity } =
 	orderSlice.actions;
 

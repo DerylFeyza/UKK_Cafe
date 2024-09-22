@@ -25,6 +25,8 @@ export default function TransactionButton({ menuData }: { menuData: Menu }) {
 		);
 		if (item) {
 			setQuantity(item.quantity);
+		} else {
+			setQuantity(0);
 		}
 	}, [orderList, menuData.id_menu]);
 
