@@ -39,9 +39,14 @@ export default function Navbar() {
 									</Link>
 								</div>
 							) : session.user?.role === "kasir" ? (
-								<Link href="/kasir/transactions" className="link-button">
-									<button className="unselectable">Manage Transaction</button>
-								</Link>
+								<div className="flex space-x-10">
+									<Link href="/kasir/transactions" className="link-button">
+										<button className="unselectable">Create Transaction</button>
+									</Link>
+									<Link href="/kasir/manage" className="link-button">
+										<button className="unselectable">Manage Transaction</button>
+									</Link>
+								</div>
 							) : session.user?.role === "manajer" ? (
 								<Link href="/manajer/transactions" className="link-button">
 									<button className="unselectable">Transactions</button>

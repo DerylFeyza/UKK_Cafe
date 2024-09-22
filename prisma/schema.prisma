@@ -42,6 +42,7 @@ model DetailTransaksi {
   id_detail_transaksi String @id @default(uuid())
   id_transaksi        String
   id_menu             String
+  jumlah              Int
   harga               Int
 
   Transaksi Transaksi @relation(fields: [id_transaksi], references: [id_transaksi])

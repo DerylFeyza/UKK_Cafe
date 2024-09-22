@@ -1,6 +1,6 @@
 "use client";
 import { Meja } from "@prisma/client";
-import { Trash, Edit3 } from "lucide-react"; // Adding Edit icon for the update button
+import { Trash, Edit3 } from "lucide-react";
 import { useState } from "react";
 import { handleDeleteMeja, handleUpdateMeja } from "@/app/utils/actions/meja";
 

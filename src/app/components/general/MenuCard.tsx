@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Menu } from "@prisma/client";
 import TransactionButton from "./MenuCardButtons/TransactionButton";
 import DetailsButton from "./MenuCardButtons/DetailsButton";
 import DetailModal from "../../admin/menus/components/DetailModal";
 import { useState } from "react";
+import { Menu } from "@prisma/client";
 
 export default function MenuCard({
 	menuData,
@@ -18,7 +18,16 @@ export default function MenuCard({
 	const formatCash = new Intl.NumberFormat("id-ID", {
 		notation: "compact",
 		maximumFractionDigits: 1,
-	}).format(menuData.harga);
+	}).format(+menuData.harga);
+
+	const updateData = {
+		id_menu: menuData.id_menu as string,
+		nama_menu: menuData.nama_menu as string,
+		jenis: menuData.jenis as string,
+		deskripsi: menuData.deskripsi as string,
+		harga: menuData.harga.toString() as string,
+		gambar: menuData.gambar as string,
+	};
 
 	return (
 		<div className="w-72 rounded-lg overflow-hidden shadow-lg bg-white">
@@ -50,11 +59,11 @@ export default function MenuCard({
 						<DetailModal
 							isModalOpen={isModalOpen}
 							setIsModalOpen={setIsModalOpen}
-							initialData={menuData}
+							initialData={updateData}
 						/>
 					</div>
 				) : path === "kasir" ? (
-					<TransactionButton />
+					<TransactionButton menuData={menuData} />
 				) : null}
 			</div>
 		</div>

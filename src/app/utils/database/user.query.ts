@@ -25,9 +25,9 @@ export const findAllUser = async (where: Prisma.UserWhereInput) => {
 		where,
 	});
 };
-
 export const findFilteredUser = async (where: UserDataType) => {
 	return await prisma.user.findMany({
+		// @ts-expect-error idkman
 		where: {
 			...(where.username
 				? {

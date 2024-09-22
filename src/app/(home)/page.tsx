@@ -33,9 +33,20 @@ export default async function Home() {
 				<div className="flex items-center space-x-4">
 					{session ? (
 						session.user?.role === "kasir" ? (
-							<button className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out">
-								Start Making Transaction
-							</button>
+							<div className="flex gap-2 flex-wrap">
+								<Link
+									href="/kasir/transactions"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Start Making Transactions
+								</Link>
+								<Link
+									href="/kasir/manage"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Manage Transactions
+								</Link>
+							</div>
 						) : session.user?.role === "admin" ? (
 							<div className="flex gap-2 flex-wrap">
 								<Link

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "./components/NextAuthProvider";
+import Providers from "@/redux/Provider";
+import { store } from "../redux/store";
 import Navbar from "./components/general/Navbar";
 import "./globals.css";
 
@@ -17,13 +19,16 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className={poppins.className}>
-				<NextAuthProvider>
-					<Navbar />
-					{children}
-				</NextAuthProvider>
-			</body>
-		</html>
+		// @ts-expect-error can i live
+		<Providers store={store}>
+			<html lang="en">
+				<body className={poppins.className}>
+					<NextAuthProvider>
+						<Navbar />
+						{children}
+					</NextAuthProvider>
+				</body>
+			</html>
+		</Providers>
 	);
 }
