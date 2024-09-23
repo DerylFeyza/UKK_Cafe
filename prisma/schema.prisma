@@ -13,11 +13,12 @@ datasource db {
 }
 
 model User {
-  id_user   String @id @default(uuid())
+  id_user   String  @id @default(uuid())
   nama_user String
   role      Role
-  username  String @unique
+  username  String  @unique
   password  String
+  isDeleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,6 +58,7 @@ model Menu {
   deskripsi String?
   gambar    String
   harga     Int
+  isDeleted Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -65,8 +67,9 @@ model Menu {
 }
 
 model Meja {
-  id_meja    String @id @default(uuid())
-  nomor_meja String @unique
+  id_meja    String  @id @default(uuid())
+  nomor_meja String  @unique
+  isDeleted  Boolean @default(false)
 
   Transaksi Transaksi[]
 }

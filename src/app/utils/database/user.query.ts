@@ -13,16 +13,27 @@ export const getAllUser = async () => {
 		orderBy: {
 			createdAt: "asc",
 		},
+		where: {
+			isDeleted: false,
+		},
 	});
 };
 
 export const findUser = async (where: Prisma.UserWhereUniqueInput) => {
-	return await prisma.user.findUnique({ where });
+	return await prisma.user.findUnique({
+		where: {
+			...where,
+			isDeleted: false,
+		},
+	});
 };
 
 export const findAllUser = async (where: Prisma.UserWhereInput) => {
 	return await prisma.user.findMany({
-		where,
+		where: {
+			...where,
+			isDeleted: false,
+		},
 	});
 };
 export const findFilteredUser = async (where: UserDataType) => {
@@ -42,6 +53,7 @@ export const findFilteredUser = async (where: UserDataType) => {
 				  }
 				: {}),
 			role: where.role ? where.role : undefined,
+			isDeleted: false,
 		},
 	});
 };
@@ -61,5 +73,5 @@ export const updateUser = async (
 };
 
 export const deleteUser = async (where: Prisma.UserWhereUniqueInput) => {
-	return await prisma.user.delete({ where });
+	return await prisma.user.update({ where, data: { isDeleted: true } });
 };

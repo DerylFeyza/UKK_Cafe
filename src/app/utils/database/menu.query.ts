@@ -6,10 +6,18 @@ export const getAllMenu = async () =>
 		orderBy: {
 			createdAt: "asc",
 		},
+		where: {
+			isDeleted: false,
+		},
 	});
 
 export const findMenu = async (where: Prisma.MenuWhereUniqueInput) => {
-	return await prisma.menu.findUnique({ where });
+	return await prisma.menu.findUnique({
+		where: {
+			...where,
+			isDeleted: false,
+		},
+	});
 };
 
 export const createMenu = async (data: Prisma.MenuCreateInput) => {
@@ -27,5 +35,5 @@ export const updateMenu = async (
 };
 
 export const deleteMenu = async (where: Prisma.MenuWhereUniqueInput) => {
-	return await prisma.menu.delete({ where });
+	return await prisma.menu.update({ where, data: { isDeleted: true } });
 };

@@ -18,3 +18,19 @@ export const createTransaksi = async (
 		data: detailTransaksiData,
 	});
 };
+
+export const getAllCompletedTransaksi = async () => {
+	await prisma.transaksi.findMany({
+		where: {
+			status: "lunas",
+		},
+	});
+};
+
+export const getAllUncompleteTransaksi = async () => {
+	await prisma.transaksi.findMany({
+		where: {
+			status: "belum_bayar",
+		},
+	});
+};
