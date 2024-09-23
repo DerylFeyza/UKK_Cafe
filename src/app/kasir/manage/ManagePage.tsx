@@ -1,0 +1,43 @@
+"use client";
+import Sidebar from "./components/Sidebar";
+import TransaksiCard from "./components/TransaksiCard";
+import { useState } from "react";
+import { TransaksiType } from "../../../../types/transaksi";
+export default function KasirManagePage({
+	completedTransaksi,
+	uncompleteTransaksi,
+}: {
+	completedTransaksi: TransaksiType[];
+	uncompleteTransaksi: TransaksiType[];
+}) {
+	const [activeButton, setActiveButton] = useState<"uncomplete" | "completed">(
+		"uncomplete"
+	);
+
+	const displayedTransaksi =
+		activeButton === "uncomplete" ? uncompleteTransaksi : completedTransaksi;
+
+	return (
+		<div className="min-h-screen bg-background p-8 pt-24">
+			<div className="max-w-8xl mx-auto flex space-x-12">
+				<div className="w-1/5">
+					<Sidebar
+						activeButton={activeButton}
+						setActiveButton={setActiveButton}
+					/>
+				</div>
+				<div className="w-4/5">
+					<div className="flex gap-4 flex-wrap max-h-[82vh] overflow-y-auto mr-24 sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24">
+						{displayedTransaksi.map((transaksi) => (
+							<TransaksiCard
+								key={transaksi.id_transaksi}
+								transaksiData={transaksi}
+								type={activeButton}
+							/>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}

@@ -1,6 +1,5 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export const createTransaksi = async (
 	data: Prisma.TransaksiCreateInput,
@@ -20,17 +19,70 @@ export const createTransaksi = async (
 };
 
 export const getAllCompletedTransaksi = async () => {
-	await prisma.transaksi.findMany({
+	return await prisma.transaksi.findMany({
 		where: {
 			status: "lunas",
+		},
+		orderBy: {
+			tgl_transaksi: "desc",
+		},
+		include: {
+			DetailTransaksi: {
+				include: {
+					Menu: {
+						select: {
+							nama_menu: true,
+							harga: true,
+						},
+					},
+				},
+			},
+			Meja: {
+				select: {
+					nomor_meja: true,
+				},
+			},
+			User: {
+				select: {
+					nama_user: true,
+				},
+			},
 		},
 	});
 };
 
 export const getAllUncompleteTransaksi = async () => {
-	await prisma.transaksi.findMany({
+	return await prisma.transaksi.findMany({
 		where: {
 			status: "belum_bayar",
 		},
+		include: {
+			DetailTransaksi: {
+				include: {
+					Menu: {
+						select: {
+							nama_menu: true,
+							harga: true,
+						},
+					},
+				},
+			},
+			Meja: {
+				select: {
+					nomor_meja: true,
+				},
+			},
+			User: {
+				select: {
+					nama_user: true,
+				},
+			},
+		},
 	});
+};
+
+export const completeTransaction = async (
+	where: Prisma.TransaksiWhereUniqueInput
+) => {
+	await prisma.transaksi.update({ where, data: { status: "lunas" } });
 };

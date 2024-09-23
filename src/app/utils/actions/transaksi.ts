@@ -1,13 +1,15 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { createTransaksi } from "../database/transaksi.query";
+import {
+	createTransaksi,
+	completeTransaction,
+} from "../database/transaksi.query";
 import { Status } from "@prisma/client";
 
 export const handleCreateTransaksi = async (
 	formData: FormData,
 	orderDetails: { id_menu: string; harga: number; jumlah: number }[]
 ) => {
-	console.log(formData);
 	const transaksiData = {
 		tgl_transaksi: new Date(),
 		nama_pelanggan: formData.get("nama_pelanggan") as string,
@@ -22,5 +24,10 @@ export const handleCreateTransaksi = async (
 	};
 
 	await createTransaksi(transaksiData, orderDetails);
+	revalidatePath("/", "layout");
+};
+
+export const handleCompleteTransaksi = async (id_transaksi: string) => {
+	await completeTransaction({ id_transaksi });
 	revalidatePath("/", "layout");
 };
