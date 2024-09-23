@@ -2,7 +2,10 @@
 import { X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useState } from "react";
 import { setSelectedMeja } from "@/redux/slices/mejaSlice";
+import SearchInput from "@/app/components/general/SearchInput";
+
 export default function SelectMejaModal({
 	isModalOpen,
 	setIsModalOpen,
@@ -15,6 +18,17 @@ export default function SelectMejaModal({
 	const selectedMeja = useSelector(
 		(state: RootState) => state.mejaList.selectedMeja?.id_meja
 	);
+	const [searchTerm, setSearchTerm] = useState("");
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(e.target.value);
+	};
+
+	const filteredMejaList = mejaList.reduce((acc, meja) => {
+		if (meja.nomor_meja.toLowerCase().includes(searchTerm.toLowerCase())) {
+			acc.push(meja);
+		}
+		return acc;
+	}, [] as typeof mejaList);
 
 	const handleSelectMeja = (id_meja: string, nomor_meja: string) => {
 		dispatch(setSelectedMeja({ id_meja, nomor_meja }));
@@ -45,6 +59,14 @@ export default function SelectMejaModal({
 							animation: "modalAppear 0.3s ease-out",
 						}}
 					>
+						<div className="p-6">
+							<SearchInput
+								searchTerm={searchTerm}
+								handleSearchChange={handleSearchChange}
+								handleSearch={() => {}}
+							/>
+						</div>
+
 						<button
 							onClick={toggleModal}
 							className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -53,7 +75,7 @@ export default function SelectMejaModal({
 						</button>
 
 						<div className="p-6 w-full flex-wrap flex gap-2">
-							{mejaList.map((meja) => (
+							{filteredMejaList.map((meja) => (
 								<div key={meja.id_meja}>
 									<button
 										type="button"

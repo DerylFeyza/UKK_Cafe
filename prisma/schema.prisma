@@ -32,6 +32,7 @@ model Transaksi {
   id_meja        String
   nama_pelanggan String   @unique
   status         Status
+  total          Int
 
   User            User              @relation(fields: [id_user], references: [id_user])
   Meja            Meja              @relation(fields: [id_meja], references: [id_meja])
