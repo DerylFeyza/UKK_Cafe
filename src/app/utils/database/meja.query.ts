@@ -3,6 +3,11 @@ import { Prisma } from "@prisma/client";
 
 export const getAllMeja = async () => await prisma.meja.findMany({});
 
+export const findAllMeja = async (where: Prisma.MejaWhereInput) =>
+	await prisma.meja.findMany({
+		where,
+	});
+
 export const findMeja = async (where: Prisma.MejaWhereUniqueInput) => {
 	return await prisma.meja.findUnique({ where });
 };
