@@ -18,7 +18,7 @@ export default function TransaksiCard({
 				<div className="font-thin text-xs mb-2 ">
 					#{transaksiData.id_transaksi}
 				</div>
-				<p className="text-gray-700 text-base line-clamp-2 mb-1">
+				<p className="text-gray-700 text-base line-clamp-1 mb-1">
 					{transaksiData.nama_pelanggan}
 				</p>
 				<div className="font-semibold text-sm mb-2 flex justify-between">

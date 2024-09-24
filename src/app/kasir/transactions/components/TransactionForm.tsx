@@ -61,7 +61,7 @@ export default function TransactionForm() {
 	};
 
 	return (
-		<div className="bg-white shadow-lg rounded-lg">
+		<div className="bg-white rounded-lg shadow-md mb-2">
 			<div className="p-8">
 				<form className="space-y-6" onSubmit={handleSubmitTransaksi}>
 					<div className="flex justify-between items-center mb-6 flex-wrap">

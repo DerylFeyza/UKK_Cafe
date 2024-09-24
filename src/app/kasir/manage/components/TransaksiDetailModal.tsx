@@ -63,7 +63,7 @@ export default function TransaksiDetailModal({
 	};
 
 	return (
-		<div className="">
+		<div>
 			{isModalOpen && (
 				<div
 					className="fixed inset-0 z-10 bg-black bg-opacity-50 flex items-center justify-center p-4 "
@@ -180,7 +180,9 @@ export default function TransaksiDetailModal({
 							</div>
 							<div className="font-semibold text-xl flex justify-between py-2">
 								<span>Total:</span>
-								<span>Rp. {transaksiData.total.toLocaleString("id-ID")}</span>
+								<span className="px-8">
+									Rp. {transaksiData.total.toLocaleString("id-ID")}
+								</span>
 							</div>
 						</div>
 						<div className="p-4 flex ">

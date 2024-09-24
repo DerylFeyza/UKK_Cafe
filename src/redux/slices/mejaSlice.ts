@@ -25,8 +25,9 @@ const mejaSlice = createSlice({
 	initialState,
 	reducers: {
 		addItemsToMejaList: (state, action: PayloadAction<MejaDetail[]>) => {
-			state.mejaList.push(...action.payload);
+			state.mejaList = [...action.payload];
 		},
+
 		setSelectedMeja: (state, action: PayloadAction<SelectedMeja>) => {
 			state.selectedMeja = action.payload;
 		},

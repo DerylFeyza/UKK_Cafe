@@ -56,6 +56,7 @@ export const getAllUncompleteTransaksi = async () => {
 		where: {
 			status: "belum_bayar",
 		},
+
 		include: {
 			DetailTransaksi: {
 				include: {
@@ -97,6 +98,9 @@ export const findUncompleteTransaksi = async (
 				},
 			],
 		},
+		orderBy: {
+			tgl_transaksi: "asc",
+		},
 		include: {
 			DetailTransaksi: {
 				include: {
@@ -137,6 +141,9 @@ export const findCompletedTransaksi = async (
 					},
 				},
 			],
+		},
+		orderBy: {
+			tgl_transaksi: "asc",
 		},
 		include: {
 			DetailTransaksi: {

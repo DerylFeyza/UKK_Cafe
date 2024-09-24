@@ -20,6 +20,30 @@ export const findMenu = async (where: Prisma.MenuWhereUniqueInput) => {
 	});
 };
 
+export const findAllMenu = async (where: Prisma.MenuWhereInput) => {
+	return await prisma.menu.findMany({
+		where: {
+			...(where.nama_menu || where.deskripsi
+				? {
+						OR: [
+							where.nama_menu
+								? { nama_menu: { contains: where.nama_menu } }
+								: undefined,
+							where.deskripsi
+								? { deskripsi: { contains: where.deskripsi } }
+								: undefined,
+						].filter(Boolean) as Prisma.MenuWhereInput[],
+				  }
+				: {}),
+			jenis: where.jenis ? where.jenis : undefined,
+			isDeleted: false,
+		},
+		orderBy: {
+			createdAt: "asc",
+		},
+	});
+};
+
 export const createMenu = async (data: Prisma.MenuCreateInput) => {
 	return await prisma.menu.create({ data });
 };
