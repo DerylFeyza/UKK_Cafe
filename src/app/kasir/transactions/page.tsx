@@ -1,8 +1,7 @@
 import { getAllMenu, findAllMenu } from "@/app/utils/database/menu.query";
 import { getAllMeja } from "@/app/utils/database/meja.query";
 import TransactionPage from "./TransactionPage";
-import { Menu } from "@prisma/client";
-import { Jenis } from "@prisma/client";
+import { Menu, Jenis } from "@prisma/client";
 export default async function Transactions({
 	searchParams,
 }: {

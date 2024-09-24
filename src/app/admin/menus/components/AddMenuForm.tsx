@@ -53,7 +53,7 @@ export default function AddMenuForm() {
 	};
 
 	return (
-		<div className="bg-white shadow-lg rounded-lg">
+		<div className="bg-white shadow-md rounded-lg mb-2">
 			<div className="p-8">
 				<form className="space-y-6" onSubmit={handleSubmit}>
 					<h2 className="text-2xl font-bold text-secondary mb-6">Add Menu</h2>
