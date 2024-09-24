@@ -2,12 +2,19 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import SkeletonLoader from "../SkeletonLoader";
+import { usePathname } from "next/navigation";
 import Logo from "@/../public/logo/logo.png";
 import Image from "next/image";
 
 export default function Navbar() {
 	const { data: session, status } = useSession();
 	const loading = status === "loading";
+
+	const pathname = usePathname();
+
+	if (pathname === "/login") {
+		return null;
+	}
 
 	return (
 		<nav className="bg-background fixed top-0 left-0 w-full z-50">
