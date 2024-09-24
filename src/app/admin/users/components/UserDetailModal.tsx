@@ -68,9 +68,6 @@ export default function UserDetailModal({
 		const result = await handleUpdateUser(initialData.id_user, formData);
 		handleToastResponse(result);
 
-		setNamaUser(initialData.nama_user);
-		setUsername(initialData.username);
-		setRole(initialData.role);
 		setIsPasswordVisible(false);
 		setPassword("");
 		setIsModalOpen(false);
@@ -140,7 +137,7 @@ export default function UserDetailModal({
 									</label>
 									<select
 										id="role"
-										value={initialData.role}
+										value={role}
 										onChange={(e) => setRole(e.target.value)}
 										className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 										required
