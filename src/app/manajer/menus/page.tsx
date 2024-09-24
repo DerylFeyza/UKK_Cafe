@@ -21,10 +21,10 @@ export default async function Menus({
 		<div className="max-h-screen min-h-screen bg-background p-8 pt-24">
 			<div className="max-w-screen mx-auto">
 				<MenuFilterLayout searchData={searchParams} />
-				<div className="flex flex-wrap max-h-[76vh] overflow-y-auto sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24">
+				<div className="flex flex-wrap max-h-[76vh] overflow-y-auto sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24 gap-4">
 					{menus &&
 						menus.map((menu, index) => (
-							<div className="pb-4 pr-2" key={index}>
+							<div key={index}>
 								<MenuCard menuData={menu} path={"manajer"} />
 							</div>
 						))}
