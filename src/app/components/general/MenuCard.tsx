@@ -53,13 +53,14 @@ export default function MenuCard({
 			</div>
 			<div className="px-6 pb-6 flex justify-between items-center">
 				<span className="font-bold text-xl">Rp. {formatCash}</span>
-				{path === "admin" ? (
+				{path === "admin" || path === "manajer" ? (
 					<div>
 						<DetailsButton setIsModalOpen={setIsModalOpen} />
 						<DetailModal
 							isModalOpen={isModalOpen}
 							setIsModalOpen={setIsModalOpen}
 							initialData={updateData}
+							path={path}
 						/>
 					</div>
 				) : path === "kasir" ? (

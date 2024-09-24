@@ -69,9 +69,12 @@ export default async function Home() {
 								</Link>
 							</div>
 						) : session.user?.role === "manajer" ? (
-							<button className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out">
-								Manage Team
-							</button>
+							<Link
+								href="/manajer/menus"
+								className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+							>
+								Manage Menu
+							</Link>
 						) : null
 					) : (
 						<Link

@@ -17,10 +17,12 @@ export default function DetailModal({
 	isModalOpen,
 	setIsModalOpen,
 	initialData,
+	path,
 }: {
 	isModalOpen: boolean;
 	setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	initialData: UpdateData;
+	path: "admin" | "manajer";
 }) {
 	const [namaMenu, setNamaMenu] = useState(initialData.nama_menu);
 	const [jenis, setJenis] = useState(initialData.jenis);
@@ -35,6 +37,7 @@ export default function DetailModal({
 		setHarga(initialData.harga);
 		setJenis(initialData.jenis);
 		setIsModalOpen(!isModalOpen);
+		setImagePreview(null);
 	};
 
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,22 +134,24 @@ export default function DetailModal({
 										/>
 									)}
 								</div>
-								<div className="flex items-center">
-									<label
-										htmlFor="gambar"
-										className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center cursor-pointer"
-									>
-										<Upload className="w-5 h-5 mr-2" />
-										Update Image
-									</label>
-									<input
-										type="file"
-										id="gambar"
-										accept="image/*"
-										onChange={handleImageChange}
-										className="hidden"
-									/>
-								</div>
+								{path === "admin" && (
+									<div className="flex items-center">
+										<label
+											htmlFor="gambar"
+											className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg flex items-center justify-center cursor-pointer"
+										>
+											<Upload className="w-5 h-5 mr-2" />
+											Update Image
+										</label>
+										<input
+											type="file"
+											id="gambar"
+											accept="image/*"
+											onChange={handleImageChange}
+											className="hidden"
+										/>
+									</div>
+								)}
 							</div>
 							<div className="md:w-1/2 p-6">
 								<div className="h-full flex flex-col">
@@ -220,21 +225,23 @@ export default function DetailModal({
 											/>
 										</div>
 									</div>
-									<div className="mt-6 flex space-x-4">
-										<button
-											type="submit"
-											className="w-full button-transition font-bold py-2 px-4 rounded-lg"
-										>
-											Update Menu
-										</button>
-										<button
-											type="button"
-											className="w-full button-transition font-bold py-2 px-4 rounded-lg"
-											onClick={() => handleDelete(initialData.id_menu)}
-										>
-											Delete Menu
-										</button>
-									</div>
+									{path === "admin" && (
+										<div className="mt-6 flex space-x-4">
+											<button
+												type="submit"
+												className="w-full button-transition font-bold py-2 px-4 rounded-lg"
+											>
+												Update Menu
+											</button>
+											<button
+												type="button"
+												className="w-full button-transition font-bold py-2 px-4 rounded-lg"
+												onClick={() => handleDelete(initialData.id_menu)}
+											>
+												Delete Menu
+											</button>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
