@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { handleCreateUser } from "@/app/utils/actions/user";
-
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function AddUserForm() {
 	const [namaUser, setNamaUser] = useState("");
 	const [role, setRole] = useState("");
@@ -18,12 +18,13 @@ export default function AddUserForm() {
 		formData.append("username", username);
 		formData.append("password", password);
 
-		await handleCreateUser(formData);
+		const result = await handleCreateUser(formData);
 
 		setNamaUser("");
 		setRole("");
 		setUsername("");
 		setPassword("");
+		handleToastResponse(result);
 	};
 
 	return (

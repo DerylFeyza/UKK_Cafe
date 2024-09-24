@@ -2,7 +2,7 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 import { handleUpdateUser, handleDeleteUser } from "@/app/utils/actions/user";
-
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 interface UpdateUserData {
 	id_user: string;
 	nama_user: string;
@@ -49,7 +49,8 @@ export default function UserDetailModal({
 	};
 
 	const handleDelete = async (id: string) => {
-		await handleDeleteUser(id);
+		const result = await handleDeleteUser(id);
+		handleToastResponse(result);
 		setIsModalOpen(false);
 	};
 
@@ -64,7 +65,12 @@ export default function UserDetailModal({
 			formData.append("password", password);
 		}
 
-		await handleUpdateUser(initialData.id_user, formData);
+		const result = await handleUpdateUser(initialData.id_user, formData);
+		handleToastResponse(result);
+
+		setNamaUser(initialData.nama_user);
+		setUsername(initialData.username);
+		setRole(initialData.role);
 		setIsPasswordVisible(false);
 		setPassword("");
 		setIsModalOpen(false);

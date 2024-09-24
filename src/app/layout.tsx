@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "./components/NextAuthProvider";
+import ToastProvider from "@/lib/ToastProvider";
 import Providers from "@/redux/Provider";
 import { store } from "../redux/store";
 import Navbar from "./components/general/Navbar";
@@ -25,7 +26,7 @@ export default function RootLayout({
 				<body className={poppins.className}>
 					<NextAuthProvider>
 						<Navbar />
-						{children}
+						<ToastProvider>{children}</ToastProvider>
 					</NextAuthProvider>
 				</body>
 			</html>
