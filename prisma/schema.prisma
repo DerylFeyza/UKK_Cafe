@@ -31,7 +31,7 @@ model Transaksi {
   tgl_transaksi  DateTime
   id_user        String
   id_meja        String
-  nama_pelanggan String   @unique
+  nama_pelanggan String
   status         Status
   total          Int
 

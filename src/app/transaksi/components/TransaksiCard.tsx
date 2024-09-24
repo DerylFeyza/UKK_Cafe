@@ -66,7 +66,9 @@ export default function TransaksiCard({
 							</button>
 						)}
 						<button
-							className="py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
+							className={`py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition ${
+								role !== "kasir" ? "w-full" : ""
+							}`}
 							onClick={() => setIsModalOpen(true)}
 						>
 							Details

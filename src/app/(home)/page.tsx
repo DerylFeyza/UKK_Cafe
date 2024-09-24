@@ -67,6 +67,12 @@ export default async function Home() {
 								>
 									Manage Meja
 								</Link>
+								<Link
+									href="/transaksi"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Transaksi
+								</Link>
 							</div>
 						) : session.user?.role === "manajer" ? (
 							<div className="flex gap-2 flex-wrap">

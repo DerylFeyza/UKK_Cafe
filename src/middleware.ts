@@ -13,6 +13,10 @@ export default withAuth(function middleware(req) {
 	const userRole = nextauth.token?.role;
 	const requestedPath = nextUrl.pathname;
 
+	if (requestedPath.startsWith("/transaksi")) {
+		return NextResponse.next();
+	}
+
 	const isAuthorized = Object.entries(rolePaths).some(
 		([role, path]) => userRole === role && requestedPath.startsWith(path)
 	);
@@ -27,5 +31,10 @@ export default withAuth(function middleware(req) {
 });
 
 export const config = {
-	matcher: ["/kasir/:path*", "/manajer/:path*", "/admin/:path*"],
+	matcher: [
+		"/kasir/:path*",
+		"/manajer/:path*",
+		"/admin/:path*",
+		"/transaksi/:path*",
+	],
 };
