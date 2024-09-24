@@ -1,7 +1,7 @@
 "use client";
 import { TransaksiType } from "../../../../../types/transaksi";
 import { handleCompleteTransaksi } from "@/app/utils/actions/transaksi";
-import TransactionDetailModal from "./TransactionDetailModal";
+import TransactionDetailModal from "./TransaksiDetailModal";
 import { useState } from "react";
 export default function TransaksiCard({
 	transaksiData,
@@ -69,12 +69,9 @@ export default function TransaksiCard({
 						</button>
 					</div>
 				) : type === "completed" ? (
-					<div className="flex justify-between w-full space-x-4">
-						<button className="w-1/2 py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition">
-							Cetak
-						</button>
+					<div className="flex justify-center w-full space-x-4">
 						<button
-							className="w-1/2 py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
+							className="w-full py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
 							onClick={() => setIsModalOpen(true)}
 						>
 							Details

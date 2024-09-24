@@ -81,6 +81,39 @@ export const getAllUncompleteTransaksi = async () => {
 	});
 };
 
+export const findTransaksi = async (
+	where: Prisma.TransaksiWhereUniqueInput
+) => {
+	return await prisma.transaksi.findUnique({
+		where: {
+			status: "belum_bayar",
+			...where,
+		},
+		include: {
+			DetailTransaksi: {
+				include: {
+					Menu: {
+						select: {
+							nama_menu: true,
+							harga: true,
+						},
+					},
+				},
+			},
+			Meja: {
+				select: {
+					nomor_meja: true,
+				},
+			},
+			User: {
+				select: {
+					nama_user: true,
+				},
+			},
+		},
+	});
+};
+
 export const completeTransaction = async (
 	where: Prisma.TransaksiWhereUniqueInput
 ) => {

@@ -18,7 +18,7 @@ export default function KasirManagePage({
 		activeButton === "uncomplete" ? uncompleteTransaksi : completedTransaksi;
 
 	return (
-		<div className="min-h-screen bg-background p-8 pt-24">
+		<div className="min-h-screen bg-background p-8 pt-24 max-h-screen overflow-hidden">
 			<div className="max-w-8xl mx-auto flex space-x-12">
 				<div className="w-1/5">
 					<Sidebar

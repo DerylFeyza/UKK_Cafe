@@ -62,29 +62,24 @@ div {
 	@apply font-semibold text-lg text-secondary hover:text-primary transition duration-300;
 }
 
-/* Base styles for scrollbar */
 ::-webkit-scrollbar {
-	width: 6px; /* Width of the scrollbar */
+	width: 6px;
 }
 
-/* Scrollbar track */
 ::-webkit-scrollbar-track {
-	background-color: #f6ebda; /* Background */
+	background-color: #f6ebda;
 }
 
-/* Scrollbar handle */
 ::-webkit-scrollbar-thumb {
-	background-color: #ff902a; /* Primary */
+	background-color: #ff902a;
 	border-radius: 6px;
-	transition: background-color 0.3s ease; /* Transition effect */
+	transition: background-color 0.3s ease;
 }
 
-/* Scrollbar handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background-color: #2f2105; /* Secondary */
+	background-color: #2f2105;
 }
 
-/* Optional: Scrollbar corner */
 ::-webkit-scrollbar-corner {
-	background-color: #f9d9aa; /* Tertiary */
+	background-color: #f9d9aa;
 }
