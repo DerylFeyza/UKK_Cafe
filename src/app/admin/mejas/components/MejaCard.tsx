@@ -3,16 +3,22 @@ import { Meja } from "@prisma/client";
 import { Trash, Edit3 } from "lucide-react";
 import { useState } from "react";
 import { handleDeleteMeja, handleUpdateMeja } from "@/app/utils/actions/meja";
-
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function MejaCard({ mejaData }: { mejaData: Meja }) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [updatedMeja, setUpdatedMeja] = useState(mejaData.nomor_meja);
 
 	const handleUpdate = async () => {
 		if (updatedMeja !== mejaData.nomor_meja) {
-			await handleUpdateMeja(mejaData.id_meja, updatedMeja);
+			const result = await handleUpdateMeja(mejaData.id_meja, updatedMeja);
+			handleToastResponse(result);
 		}
 		setIsEditing(false);
+	};
+
+	const handleDelete = async () => {
+		const result = await handleDeleteMeja(mejaData.id_meja);
+		handleToastResponse(result);
 	};
 
 	const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -47,7 +53,7 @@ export default function MejaCard({ mejaData }: { mejaData: Meja }) {
 					<Edit3 className="w-5 h-5" />
 				</button>
 				<button
-					onClick={() => handleDeleteMeja(mejaData.id_meja)}
+					onClick={() => handleDelete()}
 					className="text-red-600 button-transition p-2 rounded-lg"
 				>
 					<Trash className="w-5 h-5" />

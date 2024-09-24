@@ -3,8 +3,13 @@ import { revalidatePath } from "next/cache";
 import { createMeja, deleteMeja, updateMeja } from "../database/meja.query";
 
 export const handleCreateMeja = async (no_meja: string) => {
-	await createMeja({ nomor_meja: no_meja });
-	revalidatePath("/", "layout");
+	try {
+		await createMeja({ nomor_meja: no_meja });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menambahkan meja" };
+	} catch (error) {
+		return { success: false, message: "Gagal menambahkan meja" };
+	}
 };
 
 export const handleUpdateMeja = async (id_meja: string, nomor_meja: string) => {
@@ -18,6 +23,11 @@ export const handleUpdateMeja = async (id_meja: string, nomor_meja: string) => {
 };
 
 export const handleDeleteMeja = async (id_meja: string) => {
-	await deleteMeja({ id_meja });
-	revalidatePath("/", "layout");
+	try {
+		await deleteMeja({ id_meja });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menghapus meja" };
+	} catch (error) {
+		return { success: false, message: "Gagal menghapus meja" };
+	}
 };

@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { handleCreateMeja } from "@/app/utils/actions/meja";
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function AddMejaForm() {
 	const [noMeja, setNoMeja] = useState("");
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		await handleCreateMeja(noMeja);
+		const result = await handleCreateMeja(noMeja);
+		handleToastResponse(result);
 		setNoMeja("");
 	};
 

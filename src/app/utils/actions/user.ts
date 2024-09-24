@@ -23,9 +23,9 @@ export const handleCreateUser = async (formData: FormData) => {
 
 		await createUser(userData);
 		revalidatePath("/", "layout");
-		return { success: true, message: "User created successfully" };
+		return { success: true, message: "Berhasil membuat user" };
 	} catch (error) {
-		return { success: false, message: "Failed to create user" };
+		return { success: false, message: "Gagal membuat user" };
 	}
 };
 
@@ -45,9 +45,9 @@ export const handleUpdateUser = async (id: string, formData: FormData) => {
 		}
 		await updateUser({ id_user: id }, userData);
 		revalidatePath("/", "layout");
-		return { success: true, message: "User updated successfully" };
+		return { success: true, message: "Berhasil mengupdate user" };
 	} catch (error) {
-		return { success: false, message: "Failed to update user" };
+		return { success: false, message: "Gagal mengupdate user" };
 	}
 };
 
@@ -55,8 +55,8 @@ export const handleDeleteUser = async (id: string) => {
 	try {
 		await deleteUser({ id_user: id });
 		revalidatePath("/", "layout");
-		return { success: true, message: "User deleted successfully" };
+		return { success: true, message: "Berhasil menghapus user" };
 	} catch (error) {
-		return { success: false, message: "Failed to delete user" };
+		return { success: false, message: "Gagall menghapus user" };
 	}
 };
