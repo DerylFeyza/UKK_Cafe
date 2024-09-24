@@ -140,7 +140,7 @@ export default function UserDetailModal({
 									</label>
 									<select
 										id="role"
-										value={role}
+										value={initialData.role}
 										onChange={(e) => setRole(e.target.value)}
 										className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 										required
