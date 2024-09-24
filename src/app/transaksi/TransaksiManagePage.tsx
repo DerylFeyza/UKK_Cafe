@@ -2,10 +2,10 @@
 import Sidebar from "./components/Sidebar";
 import TransaksiCard from "./components/TransaksiCard";
 import { useState } from "react";
-import { TransaksiType } from "../../../../types/transaksi";
+import { TransaksiType } from "../../../types/transaksi";
 import DateRangePicker from "@/app/components/general/DateRangePicker";
-
-export default function KasirManagePage({
+import { useSession } from "next-auth/react";
+export default function TransaksiManagePage({
 	completedTransaksi,
 	uncompleteTransaksi,
 }: {
@@ -15,6 +15,10 @@ export default function KasirManagePage({
 	const [activeButton, setActiveButton] = useState<"uncomplete" | "completed">(
 		"uncomplete"
 	);
+
+	type UserRole = "admin" | "kasir" | "manajer";
+	const { data: session } = useSession();
+	const userRole = session?.user?.role as UserRole;
 
 	const displayedTransaksi =
 		activeButton === "uncomplete" ? uncompleteTransaksi : completedTransaksi;
@@ -37,6 +41,7 @@ export default function KasirManagePage({
 								key={transaksi.id_transaksi}
 								transaksiData={transaksi}
 								type={activeButton}
+								role={userRole}
 							/>
 						))}
 					</div>

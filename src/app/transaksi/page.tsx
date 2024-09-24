@@ -4,8 +4,9 @@ import {
 	findCompletedTransaksi,
 	findUncompleteTransaksi,
 } from "@/app/utils/database/transaksi.query";
-import KasirManagePage from "./ManagePage";
-import { TransaksiType } from "../../../../types/transaksi";
+import TransaksiManagepage from "./TransaksiManagePage";
+import { TransaksiType } from "../../../types/transaksi";
+import { Suspense } from "react";
 export default async function ManageTransaction({
 	searchParams,
 }: {
@@ -28,9 +29,11 @@ export default async function ManageTransaction({
 		uncompleteTransaksi = await getAllUncompleteTransaksi();
 	}
 	return (
-		<KasirManagePage
-			uncompleteTransaksi={uncompleteTransaksi}
-			completedTransaksi={completedTransaksi}
-		/>
+		<Suspense fallback={<div className="min-h-screen bg-background" />}>
+			<TransaksiManagepage
+				uncompleteTransaksi={uncompleteTransaksi}
+				completedTransaksi={completedTransaksi}
+			/>
+		</Suspense>
 	);
 }

@@ -1,11 +1,8 @@
 "use client";
-import { TransaksiType } from "../../../../../types/transaksi";
+import { TransaksiType } from "../../../../types/transaksi";
 import Logo from "@/../public/logo/logo.png";
 import Image from "next/image";
 import { X } from "lucide-react";
-//@ts-expect-error no types
-import html2pdf from "html2pdf.js";
-
 export default function TransaksiDetailModal({
 	isModalOpen,
 	setIsModalOpen,
@@ -28,37 +25,43 @@ export default function TransaksiDetailModal({
 	};
 
 	const generatePDF = () => {
-		const element = document.getElementById("pdf-content");
-		if (element) {
-			const offScreenContainer = document.createElement("div");
-			offScreenContainer.style.position = "absolute";
-			offScreenContainer.style.left = "-9999px";
-			offScreenContainer.style.top = "-9999px";
-			document.body.appendChild(offScreenContainer);
+		if (typeof window !== "undefined") {
+			const element = document.getElementById("pdf-content");
+			if (element) {
+				//@ts-expect-error no types
+				import("html2pdf.js").then((html2pdf) => {
+					const offScreenContainer = document.createElement("div");
+					offScreenContainer.style.position = "absolute";
+					offScreenContainer.style.left = "-9999px";
+					offScreenContainer.style.top = "-9999px";
+					document.body.appendChild(offScreenContainer);
 
-			const clonedElement = element.cloneNode(true) as HTMLElement;
-			clonedElement.style.width = "190mm";
-			clonedElement.style.height = "auto";
-			clonedElement.style.maxHeight = "none";
-			clonedElement.style.overflow = "visible";
-			offScreenContainer.appendChild(clonedElement);
+					const clonedElement = element.cloneNode(true) as HTMLElement;
+					clonedElement.style.width = "190mm";
+					clonedElement.style.height = "auto";
+					clonedElement.style.maxHeight = "none";
+					clonedElement.style.overflow = "visible";
+					offScreenContainer.appendChild(clonedElement);
 
-			html2pdf()
-				.set({
-					margin: 10,
-					filename: `Invoice_${transaksiData.id_transaksi}.pdf`,
-					html2canvas: { scale: 2 },
-					jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-				})
-				.from(clonedElement)
-				.save()
-				.then(() => {
-					document.body.removeChild(offScreenContainer);
-				})
-				.catch((error: Error) => {
-					console.error("Error generating PDF:", error);
-					document.body.removeChild(offScreenContainer);
+					html2pdf
+						.default()
+						.set({
+							margin: 10,
+							filename: `Invoice_${transaksiData.id_transaksi}.pdf`,
+							html2canvas: { scale: 2 },
+							jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+						})
+						.from(clonedElement)
+						.save()
+						.then(() => {
+							document.body.removeChild(offScreenContainer);
+						})
+						.catch((error: Error) => {
+							console.error("Error generating PDF:", error);
+							document.body.removeChild(offScreenContainer);
+						});
 				});
+			}
 		}
 	};
 

@@ -41,7 +41,7 @@ export default async function Home() {
 									Start Making Transactions
 								</Link>
 								<Link
-									href="/kasir/manage"
+									href="/transaksi"
 									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
 								>
 									Manage Transactions
@@ -69,12 +69,20 @@ export default async function Home() {
 								</Link>
 							</div>
 						) : session.user?.role === "manajer" ? (
-							<Link
-								href="/manajer/menus"
-								className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-							>
-								Manage Menu
-							</Link>
+							<div className="flex gap-2 flex-wrap">
+								<Link
+									href="/manajer/menus"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Manage Menus
+								</Link>
+								<Link
+									href="/transaksi"
+									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
+								>
+									Manage Transactions
+								</Link>
+							</div>
 						) : null
 					) : (
 						<Link

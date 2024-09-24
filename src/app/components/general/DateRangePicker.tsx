@@ -20,9 +20,9 @@ export default function DateRangePicker() {
 				start: startDate,
 				end: endDate,
 			}).toString();
-			router.push(`/kasir/manage/?${query}`);
+			router.push(`/transaksi/?${query}`);
 		} else {
-			router.push(`/kasir/manage/`);
+			router.push(`/transaksi/`);
 		}
 	}, [startDate, endDate, router]);
 

@@ -1,14 +1,16 @@
 "use client";
-import { TransaksiType } from "../../../../../types/transaksi";
+import { TransaksiType } from "../../../../types/transaksi";
 import { handleCompleteTransaksi } from "@/app/utils/actions/transaksi";
 import TransactionDetailModal from "./TransaksiDetailModal";
 import { useState } from "react";
 export default function TransaksiCard({
 	transaksiData,
 	type,
+	role,
 }: {
 	transaksiData: TransaksiType;
 	type: "completed" | "uncomplete";
+	role: "admin" | "kasir" | "manajer";
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	return (
@@ -53,14 +55,16 @@ export default function TransaksiCard({
 			<div className="px-6 pb-6 flex justify-between items-center">
 				{type === "uncomplete" ? (
 					<div className="flex justify-between w-full">
-						<button
-							className="py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
-							onClick={() =>
-								handleCompleteTransaksi(transaksiData.id_transaksi)
-							}
-						>
-							Sudah Bayar
-						</button>
+						{role === "kasir" && (
+							<button
+								className="py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
+								onClick={() =>
+									handleCompleteTransaksi(transaksiData.id_transaksi)
+								}
+							>
+								Sudah Bayar
+							</button>
+						)}
 						<button
 							className="py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
 							onClick={() => setIsModalOpen(true)}
