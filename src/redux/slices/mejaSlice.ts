@@ -31,9 +31,13 @@ const mejaSlice = createSlice({
 		setSelectedMeja: (state, action: PayloadAction<SelectedMeja>) => {
 			state.selectedMeja = action.payload;
 		},
+		clearSelectedMeja: (state) => {
+			state.selectedMeja = null;
+		},
 	},
 });
 
-export const { addItemsToMejaList, setSelectedMeja } = mejaSlice.actions;
+export const { addItemsToMejaList, setSelectedMeja, clearSelectedMeja } =
+	mejaSlice.actions;
 
 export default mejaSlice.reducer;

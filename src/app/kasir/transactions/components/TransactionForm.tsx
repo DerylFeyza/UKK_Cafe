@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { clearOrderList, updateOrderQuantity } from "@/redux/slices/orderSlice";
+import { clearSelectedMeja } from "@/redux/slices/mejaSlice";
 import SelectMejaModal from "./SelectMejaModal";
 import { useSession } from "next-auth/react";
 import { handleCreateTransaksi } from "@/app/utils/actions/transaksi";
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function TransactionForm() {
 	const { data: session } = useSession();
 	const orderList = useSelector((state: RootState) => state.orderList);
@@ -42,7 +44,7 @@ export default function TransactionForm() {
 	const handleSubmitTransaksi = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (selectedMeja && session?.user?.id_user) {
+		if (selectedMeja && session?.user?.id_user && orderList.length > 0) {
 			const formData = new FormData();
 			formData.append("id_meja", selectedMeja.id_meja);
 			formData.append("nama_pelanggan", pelanggan);
@@ -55,8 +57,20 @@ export default function TransactionForm() {
 				jumlah: order.quantity,
 			}));
 
-			await handleCreateTransaksi(formData, orderDetails);
-			window.location.reload();
+			const result = await handleCreateTransaksi(formData, orderDetails);
+			if (result.success === true) {
+				dispatch(clearOrderList());
+				dispatch(clearSelectedMeja());
+				setPelanggan("");
+				setStatusBayar("");
+				setIsModalOpen(false);
+			}
+			handleToastResponse(result);
+		} else {
+			handleToastResponse({
+				success: false,
+				message: "Transaksi Tidak Boleh Kosong",
+			});
 		}
 	};
 

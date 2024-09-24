@@ -10,24 +10,34 @@ export const handleCreateTransaksi = async (
 	formData: FormData,
 	orderDetails: { id_menu: string; harga: number; jumlah: number }[]
 ) => {
-	const transaksiData = {
-		tgl_transaksi: new Date(),
-		nama_pelanggan: formData.get("nama_pelanggan") as string,
-		total: parseInt(formData.get("total") as string),
-		status: formData.get("status") as Status,
-		User: {
-			connect: { id_user: formData.get("id_user") as string },
-		},
-		Meja: {
-			connect: { id_meja: formData.get("id_meja") as string },
-		},
-	};
+	try {
+		const transaksiData = {
+			tgl_transaksi: new Date(),
+			nama_pelanggan: formData.get("nama_pelanggan") as string,
+			total: parseInt(formData.get("total") as string),
+			status: formData.get("status") as Status,
+			User: {
+				connect: { id_user: formData.get("id_user") as string },
+			},
+			Meja: {
+				connect: { id_meja: formData.get("id_meja") as string },
+			},
+		};
 
-	await createTransaksi(transaksiData, orderDetails);
-	revalidatePath("/", "layout");
+		await createTransaksi(transaksiData, orderDetails);
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil membuat transaksi" };
+	} catch (error) {
+		return { success: true, message: "Gagal membuat transaksi" };
+	}
 };
 
 export const handleCompleteTransaksi = async (id_transaksi: string) => {
-	await completeTransaction({ id_transaksi });
-	revalidatePath("/", "layout");
+	try {
+		await completeTransaction({ id_transaksi });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Transaksi Berhasil" };
+	} catch (error) {
+		return { success: true, message: "Terjadi kesalahan" };
+	}
 };

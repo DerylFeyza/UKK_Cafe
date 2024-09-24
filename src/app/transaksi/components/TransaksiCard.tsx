@@ -3,6 +3,7 @@ import { TransaksiType } from "../../../../types/transaksi";
 import { handleCompleteTransaksi } from "@/app/utils/actions/transaksi";
 import TransactionDetailModal from "./TransaksiDetailModal";
 import { useState } from "react";
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function TransaksiCard({
 	transaksiData,
 	type,
@@ -12,6 +13,11 @@ export default function TransaksiCard({
 	type: "completed" | "uncomplete";
 	role: "admin" | "kasir" | "manajer";
 }) {
+	const handleComplete = async () => {
+		const result = await handleCompleteTransaksi(transaksiData.id_transaksi);
+		handleToastResponse(result);
+	};
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	return (
 		<div className="w-60 rounded-lg overflow-hidden shadow-lg bg-white">
@@ -58,9 +64,7 @@ export default function TransaksiCard({
 						{role === "kasir" && (
 							<button
 								className="py-2 px-2 border border-transparent rounded-md shadow-sm text-sm font-medium button-transition"
-								onClick={() =>
-									handleCompleteTransaksi(transaksiData.id_transaksi)
-								}
+								onClick={() => handleComplete()}
 							>
 								Sudah Bayar
 							</button>
