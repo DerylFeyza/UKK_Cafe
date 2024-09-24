@@ -18,57 +18,72 @@ interface MenuUpdateData {
 }
 
 export const handleCreateMenu = async (formData: FormData) => {
-	let namaGambar;
-	const gambar = formData.get("gambar") as File;
-	if (gambar) {
-		namaGambar = await handleImageUpload(gambar);
+	try {
+		let namaGambar;
+		const gambar = formData.get("gambar") as File;
+		if (gambar) {
+			namaGambar = await handleImageUpload(gambar);
+		}
+
+		const menuData = {
+			nama_menu: formData.get("nama_menu") as string,
+			jenis: formData.get("jenis") as Jenis,
+			deskripsi: formData.get("deskripsi") as string,
+			gambar: namaGambar as string,
+			harga: parseInt(formData.get("harga") as string),
+		};
+
+		await createMenu(menuData);
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menambahkan menu" };
+	} catch (error) {
+		return { success: false, message: "Gagal menambahkan menu" };
 	}
-
-	const menuData = {
-		nama_menu: formData.get("nama_menu") as string,
-		jenis: formData.get("jenis") as Jenis,
-		deskripsi: formData.get("deskripsi") as string,
-		gambar: namaGambar as string,
-		harga: parseInt(formData.get("harga") as string),
-	};
-
-	await createMenu(menuData);
-	revalidatePath("/", "layout");
 };
 
 export const handleUpdateMenu = async (id: string, formData: FormData) => {
-	let namaGambar: string | undefined;
-	const gambar = formData.get("gambar") as File | null;
-	const menu = await findMenu({ id_menu: id });
+	try {
+		let namaGambar: string | undefined;
+		const gambar = formData.get("gambar") as File | null;
+		const menu = await findMenu({ id_menu: id });
 
-	if (menu && menu.gambar) {
-		if (gambar) {
-			await handleImageDelete(menu.gambar);
-			namaGambar = await handleImageUpload(gambar);
+		if (menu && menu.gambar) {
+			if (gambar) {
+				await handleImageDelete(menu.gambar);
+				namaGambar = await handleImageUpload(gambar);
+			}
 		}
+
+		const menuData: MenuUpdateData = {
+			nama_menu: formData.get("nama_menu") as string,
+			jenis: formData.get("jenis") as Jenis,
+			deskripsi: formData.get("deskripsi") as string,
+			harga: parseInt(formData.get("harga") as string),
+		};
+
+		if (namaGambar) {
+			menuData.gambar = namaGambar;
+		}
+
+		await updateMenu({ id_menu: id }, menuData);
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil memperbarui menu" };
+	} catch (error) {
+		return { success: false, message: "Gagal memperbarui menu" };
 	}
-
-	const menuData: MenuUpdateData = {
-		nama_menu: formData.get("nama_menu") as string,
-		jenis: formData.get("jenis") as Jenis,
-		deskripsi: formData.get("deskripsi") as string,
-		harga: parseInt(formData.get("harga") as string),
-	};
-
-	if (namaGambar) {
-		menuData.gambar = namaGambar;
-	}
-
-	await updateMenu({ id_menu: id }, menuData);
-	revalidatePath("/", "layout");
 };
 
 export const handleDeleteMenu = async (id: string) => {
-	const menu = await findMenu({ id_menu: id });
-	if (menu) {
-		await handleImageDelete(menu.gambar);
-	}
+	try {
+		const menu = await findMenu({ id_menu: id });
+		if (menu) {
+			await handleImageDelete(menu.gambar);
+		}
 
-	await deleteMenu({ id_menu: id });
-	revalidatePath("/", "layout");
+		await deleteMenu({ id_menu: id });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menghapus menu" };
+	} catch (error) {
+		return { success: false, message: "Gagal menghapus menu" };
+	}
 };

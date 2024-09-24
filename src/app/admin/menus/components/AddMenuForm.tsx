@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { handleCreateMenu } from "@/app/utils/actions/menu";
-
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 export default function AddMenuForm() {
 	const [namaMenu, setNamaMenu] = useState("");
 	const [jenis, setJenis] = useState("");
@@ -42,7 +42,7 @@ export default function AddMenuForm() {
 		formData.append("harga", harga);
 		formData.append("gambar", file);
 
-		await handleCreateMenu(formData);
+		const result = await handleCreateMenu(formData);
 
 		setNamaMenu("");
 		setJenis("");
@@ -50,6 +50,8 @@ export default function AddMenuForm() {
 		setHarga("");
 		setImagePreview(null);
 		setFile(null);
+
+		handleToastResponse(result);
 	};
 
 	return (

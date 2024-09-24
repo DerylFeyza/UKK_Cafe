@@ -3,6 +3,7 @@ import { X, Upload } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import { handleUpdateMenu, handleDeleteMenu } from "@/app/utils/actions/menu";
+import { handleToastResponse } from "@/app/components/general/ToastNotification";
 
 interface UpdateData {
 	id_menu: string;
@@ -70,8 +71,9 @@ export default function DetailModal({
 	};
 
 	const handleDelete = async (id_menu: string) => {
-		await handleDeleteMenu(id_menu);
+		const result = await handleDeleteMenu(id_menu);
 		setIsModalOpen(false);
+		handleToastResponse(result);
 	};
 
 	const handleSubmitUpdate = async (e: React.FormEvent) => {
@@ -86,11 +88,13 @@ export default function DetailModal({
 			formData.append("gambar", file);
 		}
 
-		await handleUpdateMenu(initialData.id_menu, formData);
+		const result = await handleUpdateMenu(initialData.id_menu, formData);
 
 		setIsModalOpen(false);
 		setImagePreview(null);
 		setFile(null);
+
+		handleToastResponse(result);
 	};
 
 	return (
