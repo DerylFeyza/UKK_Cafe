@@ -81,13 +81,62 @@ export const getAllUncompleteTransaksi = async () => {
 	});
 };
 
-export const findTransaksi = async (
-	where: Prisma.TransaksiWhereUniqueInput
+export const findUncompleteTransaksi = async (
+	startDate: string,
+	endDate: string
 ) => {
-	return await prisma.transaksi.findUnique({
+	return await prisma.transaksi.findMany({
 		where: {
-			status: "belum_bayar",
-			...where,
+			AND: [
+				{ status: "belum_bayar" },
+				{
+					tgl_transaksi: {
+						gte: new Date(startDate),
+						lte: new Date(endDate),
+					},
+				},
+			],
+		},
+		include: {
+			DetailTransaksi: {
+				include: {
+					Menu: {
+						select: {
+							nama_menu: true,
+							harga: true,
+						},
+					},
+				},
+			},
+			Meja: {
+				select: {
+					nomor_meja: true,
+				},
+			},
+			User: {
+				select: {
+					nama_user: true,
+				},
+			},
+		},
+	});
+};
+
+export const findCompletedTransaksi = async (
+	startDate: string,
+	endDate: string
+) => {
+	return await prisma.transaksi.findMany({
+		where: {
+			AND: [
+				{ status: "lunas" },
+				{
+					tgl_transaksi: {
+						gte: new Date(startDate),
+						lte: new Date(endDate),
+					},
+				},
+			],
 		},
 		include: {
 			DetailTransaksi: {

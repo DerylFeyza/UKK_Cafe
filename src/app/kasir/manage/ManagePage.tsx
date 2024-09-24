@@ -3,6 +3,8 @@ import Sidebar from "./components/Sidebar";
 import TransaksiCard from "./components/TransaksiCard";
 import { useState } from "react";
 import { TransaksiType } from "../../../../types/transaksi";
+import DateRangePicker from "@/app/components/general/DateRangePicker";
+
 export default function KasirManagePage({
 	completedTransaksi,
 	uncompleteTransaksi,
@@ -27,7 +29,9 @@ export default function KasirManagePage({
 					/>
 				</div>
 				<div className="w-4/5">
-					<div className="flex gap-4 flex-wrap max-h-[82vh] overflow-y-auto mr-24 sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24">
+					<DateRangePicker />
+
+					<div className="flex gap-4 flex-wrap max-h-[72vh] overflow-y-auto mr-24 sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24">
 						{displayedTransaksi.map((transaksi) => (
 							<TransaksiCard
 								key={transaksi.id_transaksi}

@@ -1,3 +1,4 @@
+"use client";
 import { Status } from "@prisma/client";
 export type MenuType = {
 	nama_menu: string;

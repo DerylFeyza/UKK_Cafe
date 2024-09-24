@@ -12,7 +12,7 @@ export default function MenuCard({
 	path,
 }: {
 	menuData: Menu;
-	path: "admin" | "kasir";
+	path: "admin" | "kasir" | "manajer";
 }) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const formatCash = new Intl.NumberFormat("id-ID", {
