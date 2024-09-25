@@ -174,7 +174,7 @@ export default function TransaksiDetailModal({
 											{item.Menu.nama_menu}
 										</span>
 										<span className="pl-8">{item.jumlah}x</span>
-										<span>Rp. {item.Menu.harga.toLocaleString("id-ID")}</span>
+										<span>Rp. {item.harga.toLocaleString("id-ID")}</span>
 										<span>
 											Rp. {(item.jumlah * item.harga).toLocaleString("id-ID")}
 										</span>
