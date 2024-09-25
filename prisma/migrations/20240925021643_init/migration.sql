@@ -14,6 +14,9 @@ CREATE TABLE "User" (
     "role" "Role" NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id_user")
 );
@@ -26,6 +29,7 @@ CREATE TABLE "Transaksi" (
     "id_meja" TEXT NOT NULL,
     "nama_pelanggan" TEXT NOT NULL,
     "status" "Status" NOT NULL,
+    "total" INTEGER NOT NULL,
 
     CONSTRAINT "Transaksi_pkey" PRIMARY KEY ("id_transaksi")
 );
@@ -35,6 +39,7 @@ CREATE TABLE "DetailTransaksi" (
     "id_detail_transaksi" TEXT NOT NULL,
     "id_transaksi" TEXT NOT NULL,
     "id_menu" TEXT NOT NULL,
+    "jumlah" INTEGER NOT NULL,
     "harga" INTEGER NOT NULL,
 
     CONSTRAINT "DetailTransaksi_pkey" PRIMARY KEY ("id_detail_transaksi")
@@ -48,6 +53,9 @@ CREATE TABLE "Menu" (
     "deskripsi" TEXT,
     "gambar" TEXT NOT NULL,
     "harga" INTEGER NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Menu_pkey" PRIMARY KEY ("id_menu")
 );
@@ -56,18 +64,13 @@ CREATE TABLE "Menu" (
 CREATE TABLE "Meja" (
     "id_meja" TEXT NOT NULL,
     "nomor_meja" TEXT NOT NULL,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Meja_pkey" PRIMARY KEY ("id_meja")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Transaksi_nama_pelanggan_key" ON "Transaksi"("nama_pelanggan");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Menu_nama_menu_key" ON "Menu"("nama_menu");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Meja_nomor_meja_key" ON "Meja"("nomor_meja");

@@ -3,7 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import { handleCreateMenu } from "@/app/utils/actions/menu";
-import { handleToastResponse } from "@/app/components/general/ToastNotification";
+import {
+	handlePromiseToast,
+	handleToastResponse,
+} from "@/app/components/general/ToastNotification";
 export default function AddMenuForm() {
 	const [namaMenu, setNamaMenu] = useState("");
 	const [jenis, setJenis] = useState("");
@@ -31,7 +34,10 @@ export default function AddMenuForm() {
 		e.preventDefault();
 
 		if (!file) {
-			alert("Please upload an image.");
+			handleToastResponse({
+				success: false,
+				message: "Gambar tidak boleh kosong",
+			});
 			return;
 		}
 
@@ -42,7 +48,7 @@ export default function AddMenuForm() {
 		formData.append("harga", harga);
 		formData.append("gambar", file);
 
-		const result = await handleCreateMenu(formData);
+		await handlePromiseToast(handleCreateMenu(formData), "Menambahkan menu...");
 
 		setNamaMenu("");
 		setJenis("");
@@ -50,8 +56,6 @@ export default function AddMenuForm() {
 		setHarga("");
 		setImagePreview(null);
 		setFile(null);
-
-		handleToastResponse(result);
 	};
 
 	return (

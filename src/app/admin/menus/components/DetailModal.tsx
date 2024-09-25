@@ -3,7 +3,7 @@ import { X, Upload } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import { handleUpdateMenu, handleDeleteMenu } from "@/app/utils/actions/menu";
-import { handleToastResponse } from "@/app/components/general/ToastNotification";
+import { handlePromiseToast } from "@/app/components/general/ToastNotification";
 
 interface UpdateData {
 	id_menu: string;
@@ -70,10 +70,12 @@ export default function DetailModal({
 		}
 	};
 
-	const handleDelete = async (id_menu: string) => {
-		const result = await handleDeleteMenu(id_menu);
+	const handleDelete = async () => {
+		await handlePromiseToast(
+			handleDeleteMenu(initialData.id_menu),
+			"Menghapus menu..."
+		);
 		setIsModalOpen(false);
-		handleToastResponse(result);
 	};
 
 	const handleSubmitUpdate = async (e: React.FormEvent) => {
@@ -88,13 +90,14 @@ export default function DetailModal({
 			formData.append("gambar", file);
 		}
 
-		const result = await handleUpdateMenu(initialData.id_menu, formData);
+		await handlePromiseToast(
+			handleUpdateMenu(initialData.id_menu, formData),
+			"Mengupdate menu..."
+		);
 
 		setIsModalOpen(false);
 		setImagePreview(null);
 		setFile(null);
-
-		handleToastResponse(result);
 	};
 
 	return (
@@ -130,7 +133,7 @@ export default function DetailModal({
 										/>
 									) : (
 										<Image
-											src={`/menu/${initialData.gambar}`}
+											src={`${initialData.gambar}`}
 											alt={initialData.nama_menu}
 											width={400}
 											height={400}
@@ -240,7 +243,7 @@ export default function DetailModal({
 											<button
 												type="button"
 												className="w-full button-transition font-bold py-2 px-4 rounded-lg"
-												onClick={() => handleDelete(initialData.id_menu)}
+												onClick={() => handleDelete()}
 											>
 												Delete Menu
 											</button>

@@ -1,4 +1,4 @@
-const { Role } = require("@prisma/client");
+const { Role, PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 const saltRounds = 3;
 
@@ -25,5 +25,6 @@ main()
 		process.exit(1);
 	})
 	.finally(async () => {
+		// Now prisma is accessible here
 		await prisma.$disconnect();
 	});

@@ -1,24 +1,55 @@
-import path from "path";
-import { writeFile, unlink } from "fs/promises";
+import { UploadApiResponse } from "cloudinary";
+import cloudinary from "@/lib/cloudinary";
 
-const allowedFileTypes = ["image/jpeg", "image/png"];
+export async function imageUploader(file: File) {
+	const buffer: Buffer = Buffer.from(await file.arrayBuffer());
+	try {
+		const upload: UploadApiResponse | undefined = await new Promise(
+			(resolve, reject) => {
+				cloudinary.uploader
+					.upload_stream(
+						{ upload_preset: "ukkcafe_menu" },
+						(error, uploadResult) => {
+							if (error) reject(error);
+							return resolve(uploadResult);
+						}
+					)
+					//@ts-expect-error hehe
+					.end(buffer?.data ? buffer.data : buffer);
+			}
+		);
 
-export const handleImageUpload = async (file: File): Promise<string> => {
-	if (!file) {
-		throw new Error("No file provided.");
+		if (!upload) return { success: false, message: "Terjadi kesalahan" };
+
+		return { success: true, message: "Upload sukses", url: upload.secure_url };
+	} catch (error) {
+		return {
+			success: false,
+			message: "Terjadi kesalahan",
+		};
 	}
-	if (!allowedFileTypes.includes(file.type)) {
-		throw new Error("Unsupported file type. Allowed types are: JPEG, PNG");
+}
+
+export async function handleImageDelete(filename: string) {
+	try {
+		//@ts-expect-error hehe
+		const publicId = filename.split("/").pop().split(".")[0];
+		const deleteResult = await cloudinary.uploader.destroy(
+			publicId,
+			function (result) {
+				console.log(result);
+			}
+		);
+
+		if (deleteResult.result === "ok") {
+			return { success: true, message: "Image deleted successfully." };
+		} else {
+			throw new Error("Failed to delete image.");
+		}
+	} catch (error) {
+		return {
+			success: false,
+			message: "Terjadi kesalahan saat menghapus gambar",
+		};
 	}
-
-	const buffer = Buffer.from(await file.arrayBuffer());
-	const fileExtension = file.type.split("/")[1];
-	const filename = "menu-" + Date.now() + "." + fileExtension;
-	await writeFile(path.join(process.cwd(), "public/menu/" + filename), buffer);
-	return filename;
-};
-
-export const handleImageDelete = async (filename: string): Promise<void> => {
-	const filePath = path.join(process.cwd(), "public/menu/", filename);
-	await unlink(filePath);
-};
+}

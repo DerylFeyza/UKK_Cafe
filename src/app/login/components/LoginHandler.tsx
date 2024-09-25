@@ -18,7 +18,6 @@ export default function LoginForm() {
 			if (!result?.error) {
 				window.location.reload();
 			} else {
-				console.log(result);
 				setErrorMessage("Incorrect Email or Password");
 			}
 		} catch (error) {

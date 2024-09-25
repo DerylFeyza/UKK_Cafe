@@ -33,7 +33,7 @@ export default function MenuCard({
 		<div className="w-72 rounded-lg overflow-hidden shadow-lg bg-white">
 			<div className="relative">
 				<Image
-					src={`/menu/${menuData.gambar}`}
+					src={`${menuData.gambar}`}
 					alt={menuData.nama_menu}
 					width={400}
 					height={400}
