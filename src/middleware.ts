@@ -22,7 +22,7 @@ export default withAuth(function middleware(req) {
 	);
 
 	if (!isAuthorized) {
-		return NextResponse.rewrite(new URL("/accesdenied", req.url), {
+		return NextResponse.rewrite(new URL("/unauthorized", req.url), {
 			status: 403,
 		});
 	}
