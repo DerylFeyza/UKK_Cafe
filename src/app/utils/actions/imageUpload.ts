@@ -34,12 +34,7 @@ export async function handleImageDelete(filename: string) {
 	try {
 		//@ts-expect-error hehe
 		const publicId = filename.split("/").pop().split(".")[0];
-		const deleteResult = await cloudinary.uploader.destroy(
-			publicId,
-			function (result) {
-				console.log(result);
-			}
-		);
+		const deleteResult = await cloudinary.uploader.destroy(publicId);
 
 		if (deleteResult.result === "ok") {
 			return { success: true, message: "Image deleted successfully." };
