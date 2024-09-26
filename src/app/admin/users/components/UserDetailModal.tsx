@@ -39,12 +39,7 @@ export default function UserDetailModal({
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
 		if (e.target === e.currentTarget) {
-			setNamaUser(initialData.nama_user);
-			setUsername(initialData.username);
-			setRole(initialData.role);
-			setPassword("");
-			setIsModalOpen(false);
-			setIsPasswordVisible(false);
+			toggleModal();
 		}
 	};
 
@@ -107,6 +102,7 @@ export default function UserDetailModal({
 										id="nama-user"
 										value={namaUser}
 										onChange={(e) => setNamaUser(e.target.value)}
+										required
 										className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 									/>
 								</div>

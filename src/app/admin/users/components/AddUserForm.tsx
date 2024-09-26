@@ -46,6 +46,7 @@ export default function AddUserForm() {
 							id="nama-user"
 							value={namaUser}
 							onChange={(e) => setNamaUser(e.target.value)}
+							required
 							className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 						/>
 					</div>
@@ -61,6 +62,7 @@ export default function AddUserForm() {
 							type="text"
 							id="username"
 							value={username}
+							required
 							onChange={(e) => setUsername(e.target.value)}
 							className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 						/>
@@ -98,6 +100,7 @@ export default function AddUserForm() {
 							type="text"
 							id="password"
 							value={password}
+							required
 							onChange={(e) => setPassword(e.target.value)}
 							className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 						/>

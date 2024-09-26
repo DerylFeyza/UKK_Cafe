@@ -33,7 +33,12 @@ export const handlePromiseToast = (
 	pendingMessage: string = "Memproses..."
 ) => {
 	return toast.promise(
-		promise,
+		promise.then((result) => {
+			if (!result.success) {
+				throw result;
+			}
+			return result;
+		}),
 		{
 			pending: pendingMessage,
 			success: {
