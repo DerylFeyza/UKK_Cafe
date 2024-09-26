@@ -172,6 +172,7 @@ export default function DetailModal({
 												id="nama-menu"
 												value={namaMenu}
 												onChange={(e) => setNamaMenu(e.target.value)}
+												required
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 											/>
 										</div>
@@ -209,7 +210,6 @@ export default function DetailModal({
 												value={deskripsi}
 												onChange={(e) => setDeskripsi(e.target.value)}
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-												required
 											></textarea>
 										</div>
 
@@ -225,6 +225,8 @@ export default function DetailModal({
 												id="harga"
 												value={harga}
 												onChange={(e) => setHarga(e.target.value)}
+												required
+												min={1}
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 											/>
 										</div>
