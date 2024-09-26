@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { createUser, updateUser, deleteUser } from "../database/user.query";
 import { Role } from "@prisma/client";
 import { encrypt } from "../bcrypt";
+import { createUserSchema } from "@/lib/validator/user";
 
 interface userField {
 	nama_user: string;
@@ -20,6 +21,16 @@ export const handleCreateUser = async (formData: FormData) => {
 			username: formData.get("username") as string,
 			password: hashedPassword,
 		};
+
+		const validation = createUserSchema.safeParse({
+			...userData,
+			password: formData.get("password") as string,
+		});
+		if (!validation.success) {
+			const errors = validation.error.flatten();
+			const errorMessages = Object.values(errors.fieldErrors).flat().join(" ");
+			return { success: false, message: errorMessages };
+		}
 
 		await createUser(userData);
 		revalidatePath("/", "layout");
@@ -40,6 +51,17 @@ export const handleUpdateUser = async (id: string, formData: FormData) => {
 			role: formData.get("role") as Role,
 			username: formData.get("username") as string,
 		};
+
+		const validation = createUserSchema.safeParse({
+			...userData,
+			password: formData.get("password") as string,
+		});
+		if (!validation.success) {
+			const errors = validation.error.flatten();
+			const errorMessages = Object.values(errors.fieldErrors).flat().join(" ");
+			return { success: false, message: errorMessages };
+		}
+
 		if (hashedPass) {
 			userData.password = hashedPass;
 		}

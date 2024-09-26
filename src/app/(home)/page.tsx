@@ -1,7 +1,6 @@
 import { authOptions } from "@/lib/next-auth";
 import { getServerSession } from "next-auth";
 import Coffee from "@/../public/assets/coffee.jpg";
-import Link from "next/link";
 import Image from "next/image";
 export default async function Home() {
 	const session = await getServerSession(authOptions);
@@ -30,75 +29,6 @@ export default async function Home() {
 				<p className="text-lg mb-8 text-gray-600">
 					dont u love living paycheck to paycheck!
 				</p>
-				<div className="flex items-center space-x-4">
-					{session ? (
-						session.user?.role === "kasir" ? (
-							<div className="flex gap-2 flex-wrap">
-								<Link
-									href="/kasir/transactions"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Start Making Transactions
-								</Link>
-								<Link
-									href="/transaksi"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage Transactions
-								</Link>
-							</div>
-						) : session.user?.role === "admin" ? (
-							<div className="flex gap-2 flex-wrap">
-								<Link
-									href="/admin/users"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage User
-								</Link>
-								<Link
-									href="/admin/menus"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage Menu
-								</Link>
-								<Link
-									href="/admin/mejas"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage Meja
-								</Link>
-								<Link
-									href="/transaksi"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Transaksi
-								</Link>
-							</div>
-						) : session.user?.role === "manajer" ? (
-							<div className="flex gap-2 flex-wrap">
-								<Link
-									href="/manajer/menus"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage Menus
-								</Link>
-								<Link
-									href="/transaksi"
-									className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-								>
-									Manage Transactions
-								</Link>
-							</div>
-						) : null
-					) : (
-						<Link
-							href="/login"
-							className="bg-secondary text-white px-6 py-3 rounded-full flex items-center hover:bg-primary transition duration-300 ease-in-out"
-						>
-							Login Here
-						</Link>
-					)}
-				</div>
 			</div>
 			<div className="relative w-2/5">
 				<div className="mt-28 absolute inset-0 bg-secondary rounded-l-full rounded-tr-full"></div>

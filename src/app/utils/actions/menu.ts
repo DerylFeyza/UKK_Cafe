@@ -41,6 +41,10 @@ export const handleCreateMenu = async (
 				});
 			}
 
+			if (parseInt(formData.get("harga") as string) <= 0) {
+				resolve({ success: false, message: "Gagal menambahkan menu" });
+			}
+
 			const menuData = {
 				nama_menu: formData.get("nama_menu") as string,
 				jenis: formData.get("jenis") as Jenis,

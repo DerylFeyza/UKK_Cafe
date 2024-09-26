@@ -19,6 +19,7 @@ export default function AddUserForm() {
 		formData.append("password", password);
 
 		const result = await handleCreateUser(formData);
+		console.log(result);
 
 		setNamaUser("");
 		setRole("");
