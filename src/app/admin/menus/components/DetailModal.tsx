@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { handleUpdateMenu, handleDeleteMenu } from "@/app/utils/actions/menu";
 import { handlePromiseToast } from "@/app/components/general/ToastNotification";
-
+import { useEffect } from "react";
 interface UpdateData {
 	id_menu: string;
 	nama_menu: string;
@@ -32,15 +32,19 @@ export default function DetailModal({
 	const [file, setFile] = useState<File | null>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-	const toggleModal = () => {
-		setNamaMenu(initialData.nama_menu);
-		setDeskripsi(initialData.deskripsi);
-		setHarga(initialData.harga);
-		setJenis(initialData.jenis);
-		setIsModalOpen(!isModalOpen);
-		setImagePreview(null);
-	};
+	useEffect(() => {
+		if (isModalOpen) {
+			setNamaMenu(initialData.nama_menu);
+			setDeskripsi(initialData.deskripsi);
+			setHarga(initialData.harga);
+			setJenis(initialData.jenis);
+			setImagePreview(null);
+		}
+	}, [isModalOpen, initialData]);
 
+	const toggleModal = () => {
+		setIsModalOpen(!isModalOpen);
+	};
 	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
@@ -61,12 +65,7 @@ export default function DetailModal({
 		e: React.MouseEvent<HTMLDivElement, MouseEvent>
 	) => {
 		if (e.target === e.currentTarget) {
-			setNamaMenu(initialData.nama_menu);
-			setDeskripsi(initialData.deskripsi);
-			setHarga(initialData.harga);
-			setJenis(initialData.jenis);
-			setIsModalOpen(false);
-			setImagePreview(null);
+			toggleModal();
 		}
 	};
 
@@ -75,7 +74,7 @@ export default function DetailModal({
 			handleDeleteMenu(initialData.id_menu),
 			"Menghapus menu..."
 		);
-		setIsModalOpen(false);
+		toggleModal();
 	};
 
 	const handleSubmitUpdate = async (e: React.FormEvent) => {
@@ -95,9 +94,7 @@ export default function DetailModal({
 			"Mengupdate menu..."
 		);
 
-		setIsModalOpen(false);
-		setImagePreview(null);
-		setFile(null);
+		toggleModal();
 	};
 
 	return (
@@ -175,6 +172,7 @@ export default function DetailModal({
 												id="nama-menu"
 												value={namaMenu}
 												onChange={(e) => setNamaMenu(e.target.value)}
+												required
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 											/>
 										</div>
@@ -212,7 +210,6 @@ export default function DetailModal({
 												value={deskripsi}
 												onChange={(e) => setDeskripsi(e.target.value)}
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-												required
 											></textarea>
 										</div>
 
@@ -228,6 +225,8 @@ export default function DetailModal({
 												id="harga"
 												value={harga}
 												onChange={(e) => setHarga(e.target.value)}
+												required
+												min={1}
 												className="block w-full px-3 py-2 rounded-md border-2 border-tertiary shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
 											/>
 										</div>

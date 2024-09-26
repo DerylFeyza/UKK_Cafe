@@ -19,13 +19,14 @@ export async function imageUploader(file: File) {
 			}
 		);
 
-		if (!upload) return { success: false, message: "Terjadi kesalahan" };
+		if (!upload)
+			return { success: false, message: "Terjadi kesalahan mengupload gambar" };
 
 		return { success: true, message: "Upload sukses", url: upload.secure_url };
 	} catch (error) {
 		return {
 			success: false,
-			message: "Terjadi kesalahan",
+			message: "Terjadi kesalahan mengupload gambar",
 		};
 	}
 }

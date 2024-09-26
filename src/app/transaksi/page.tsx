@@ -7,6 +7,7 @@ import {
 import TransaksiManagepage from "./TransaksiManagePage";
 import { TransaksiType } from "../../../types/transaksi";
 import { Suspense } from "react";
+
 export default async function ManageTransaction({
 	searchParams,
 }: {

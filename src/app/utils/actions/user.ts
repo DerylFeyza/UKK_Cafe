@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { createUser, updateUser, deleteUser } from "../database/user.query";
 import { Role } from "@prisma/client";
 import { encrypt } from "../bcrypt";
+import { createUserSchema, updateUserSchema } from "@/lib/validator/user";
 
 interface userField {
 	nama_user: string;
@@ -21,6 +22,16 @@ export const handleCreateUser = async (formData: FormData) => {
 			password: hashedPassword,
 		};
 
+		const validation = createUserSchema.safeParse({
+			...userData,
+			password: formData.get("password") as string,
+		});
+		if (!validation.success) {
+			const errors = validation.error.flatten();
+			const errorMessages = Object.values(errors.fieldErrors).flat().join(" ");
+			return { success: false, message: errorMessages };
+		}
+
 		await createUser(userData);
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil membuat user" };
@@ -31,15 +42,28 @@ export const handleCreateUser = async (formData: FormData) => {
 
 export const handleUpdateUser = async (id: string, formData: FormData) => {
 	try {
-		let hashedPass;
-		if (formData.get("password")) {
-			hashedPass = await encrypt(formData.get("password") as string);
-		}
 		const userData: userField = {
 			nama_user: formData.get("nama_user") as string,
 			role: formData.get("role") as Role,
 			username: formData.get("username") as string,
 		};
+
+		let hashedPass;
+		if (formData.get("password")) {
+			hashedPass = await encrypt(formData.get("password") as string);
+		}
+
+		const validation = updateUserSchema.safeParse({
+			...userData,
+			...(hashedPass ? { password: formData.get("password") } : {}),
+		});
+
+		if (!validation.success) {
+			const errors = validation.error.flatten();
+			const errorMessages = Object.values(errors.fieldErrors).flat().join(" ");
+			return { success: false, message: errorMessages };
+		}
+
 		if (hashedPass) {
 			userData.password = hashedPass;
 		}
