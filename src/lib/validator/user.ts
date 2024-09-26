@@ -6,7 +6,7 @@ export const updateUserSchema = z.object({
 	username: z
 		.string()
 		.min(1, { message: "Username minimal 1 karakter!" })
-		.max(70, { message: "Username maximal 70 karakter!" }),
+		.max(70, { message: "Username maksimal 70 karakter!" }),
 	role: z.nativeEnum(Role),
 	password: z
 		.string()
@@ -19,7 +19,7 @@ export const createUserSchema = z.object({
 	username: z
 		.string()
 		.min(1, { message: "Username harus diisi!" })
-		.max(70, { message: "Username maximal 70 karakter!" }),
+		.max(70, { message: "Username maksimal 70 karakter!" }),
 	role: z.nativeEnum(Role),
 	password: z.string().min(7, { message: "Password minimal 7 karakter!" }),
 });
