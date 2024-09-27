@@ -1,5 +1,10 @@
 import prisma from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, Status } from "@prisma/client";
+import { TransaksiType } from "../../../../types/transaksi";
+interface Session {
+	role: string;
+	id_user: string;
+}
 
 export const createTransaksi = async (
 	data: Prisma.TransaksiCreateInput,
@@ -18,88 +23,53 @@ export const createTransaksi = async (
 	});
 };
 
-export const getAllCompletedTransaksi = async () => {
-	return await prisma.transaksi.findMany({
-		where: {
-			status: "lunas",
-		},
-		orderBy: {
-			tgl_transaksi: "desc",
-		},
-		include: {
-			DetailTransaksi: {
-				include: {
-					Menu: {
-						select: {
-							nama_menu: true,
-							harga: true,
-						},
-					},
-				},
-			},
-			Meja: {
-				select: {
-					nomor_meja: true,
-				},
-			},
-			User: {
-				select: {
-					nama_user: true,
-				},
-			},
-		},
-	});
-};
-
-export const getAllUncompleteTransaksi = async () => {
-	return await prisma.transaksi.findMany({
-		where: {
-			status: "belum_bayar",
-		},
-
-		include: {
-			DetailTransaksi: {
-				include: {
-					Menu: {
-						select: {
-							nama_menu: true,
-							harga: true,
-						},
-					},
-				},
-			},
-			Meja: {
-				select: {
-					nomor_meja: true,
-				},
-			},
-			User: {
-				select: {
-					nama_user: true,
-				},
-			},
-		},
-	});
-};
-
-export const findUncompleteTransaksi = async (
-	startDate: string,
-	endDate: string
+const filterTransaksiByRoleAndDate = async (
+	session: Session,
+	baseQuery: any,
+	startDate?: string,
+	endDate?: string
 ) => {
-	return await prisma.transaksi.findMany({
+	if (startDate && endDate) {
+		baseQuery.where.AND = [
+			...(baseQuery.where.AND || []),
+			{
+				tgl_transaksi: {
+					gte: new Date(startDate),
+					lte: new Date(endDate),
+				},
+			},
+		];
+	}
+
+	if (session.role === "kasir") {
+		return await prisma.transaksi.findMany({
+			...baseQuery,
+			where: {
+				...baseQuery.where,
+				id_user: session.id_user,
+			},
+		});
+	} else if (session.role === "admin" || session.role === "manajer") {
+		return await prisma.transaksi.findMany(baseQuery);
+	}
+};
+
+export const getAllTransaksi = async (
+	session: Session,
+	status: "lunas" | "belum_bayar",
+	startDate?: string,
+	endDate?: string
+): Promise<TransaksiType[]> => {
+	const baseQuery = {
 		where: {
 			AND: [
-				{ status: "belum_bayar" },
 				{
-					tgl_transaksi: {
-						gte: new Date(startDate),
-						lte: new Date(endDate),
-					},
+					status: status as Status,
 				},
 			],
 		},
 		orderBy: {
-			tgl_transaksi: "asc",
+			tgl_transaksi: status === "lunas" ? "desc" : "asc",
 		},
 		include: {
 			DetailTransaksi: {
@@ -123,51 +93,14 @@ export const findUncompleteTransaksi = async (
 				},
 			},
 		},
-	});
-};
+	};
 
-export const findCompletedTransaksi = async (
-	startDate: string,
-	endDate: string
-) => {
-	return await prisma.transaksi.findMany({
-		where: {
-			AND: [
-				{ status: "lunas" },
-				{
-					tgl_transaksi: {
-						gte: new Date(startDate),
-						lte: new Date(endDate),
-					},
-				},
-			],
-		},
-		orderBy: {
-			tgl_transaksi: "asc",
-		},
-		include: {
-			DetailTransaksi: {
-				include: {
-					Menu: {
-						select: {
-							nama_menu: true,
-							harga: true,
-						},
-					},
-				},
-			},
-			Meja: {
-				select: {
-					nomor_meja: true,
-				},
-			},
-			User: {
-				select: {
-					nama_user: true,
-				},
-			},
-		},
-	});
+	return (await filterTransaksiByRoleAndDate(
+		session,
+		baseQuery,
+		startDate,
+		endDate
+	)) as unknown as TransaksiType[];
 };
 
 export const completeTransaction = async (
