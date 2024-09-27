@@ -32,7 +32,10 @@ export const authOptions: AuthOptions = {
 			},
 			async authorize(credentials) {
 				try {
-					const user = await findUser({ username: credentials?.username });
+					const user = await findUser({
+						username: credentials?.username,
+						isDeleted: false,
+					});
 					if (!user) {
 						return null;
 					}
@@ -60,7 +63,10 @@ export const authOptions: AuthOptions = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user?.username) {
-				const userdb = await findUser({ username: user.username });
+				const userdb = await findUser({
+					username: user.username,
+					isDeleted: false,
+				});
 				if (!userdb) return token;
 				token.sub = userdb.id_user;
 				token.username = userdb.username;
@@ -72,7 +78,7 @@ export const authOptions: AuthOptions = {
 
 		async session({ session, token }) {
 			if (session.user && token.sub) {
-				const userdb = await findUser({ id_user: token.sub });
+				const userdb = await findUser({ id_user: token.sub, isDeleted: false });
 				session.user.nama_user = userdb!.nama_user;
 				session.user.username = userdb!.username;
 				session.user.id_user = userdb!.id_user;
