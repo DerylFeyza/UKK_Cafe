@@ -1,33 +1,32 @@
-import {
-	getAllCompletedTransaksi,
-	getAllUncompleteTransaksi,
-	findCompletedTransaksi,
-	findUncompleteTransaksi,
-} from "@/app/utils/database/transaksi.query";
+import { getAllTransaksi } from "@/app/utils/database/transaksi.query";
 import TransaksiManagepage from "./TransaksiManagePage";
 import { TransaksiType } from "../../../types/transaksi";
 import { Suspense } from "react";
+import { nextGetServerSession } from "@/lib/next-auth";
 
 export default async function ManageTransaction({
 	searchParams,
 }: {
-	searchParams: { start: string; end: string };
+	searchParams: { start?: string; end?: string };
 }) {
-	let completedTransaksi: TransaksiType[];
-	let uncompleteTransaksi: TransaksiType[];
+	let completedTransaksi: TransaksiType[] = [];
+	let uncompleteTransaksi: TransaksiType[] = [];
+	const session = await nextGetServerSession();
 
-	if (searchParams.start && searchParams.end) {
-		completedTransaksi = await findCompletedTransaksi(
-			searchParams.start,
-			searchParams.end
+	if (session && session.user) {
+		completedTransaksi = await getAllTransaksi(
+			session.user,
+			"lunas",
+			searchParams.start || undefined,
+			searchParams.end || undefined
 		);
-		uncompleteTransaksi = await findUncompleteTransaksi(
-			searchParams.start,
-			searchParams.end
+
+		uncompleteTransaksi = await getAllTransaksi(
+			session.user,
+			"belum_bayar",
+			searchParams.start || undefined,
+			searchParams.end || undefined
 		);
-	} else {
-		completedTransaksi = await getAllCompletedTransaksi();
-		uncompleteTransaksi = await getAllUncompleteTransaksi();
 	}
 	return (
 		<Suspense fallback={<div className="min-h-screen bg-background" />}>

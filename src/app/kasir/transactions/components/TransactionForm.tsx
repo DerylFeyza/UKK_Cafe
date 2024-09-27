@@ -69,7 +69,7 @@ export default function TransactionForm() {
 		} else {
 			handleToastResponse({
 				success: false,
-				message: "Transaksi Tidak Boleh Kosong",
+				message: "Data Transaksi Tidak Lengkap",
 			});
 		}
 	};
