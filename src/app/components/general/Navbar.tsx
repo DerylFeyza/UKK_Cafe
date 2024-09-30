@@ -47,6 +47,11 @@ export default function Navbar() {
 									<Link href="/transaksi" className="link-button">
 										<button className="unselectable">Transactions</button>
 									</Link>
+									<Link href="/transaksi/dashboard" className="link-button">
+										<button className="unselectable">
+											Transaction Dashboard
+										</button>
+									</Link>
 								</div>
 							) : session.user?.role === "kasir" ? (
 								<div className="flex space-x-10">
@@ -56,6 +61,11 @@ export default function Navbar() {
 									<Link href="/transaksi" className="link-button">
 										<button className="unselectable">Manage Transaction</button>
 									</Link>
+									<Link href="/transaksi/dashboard" className="link-button">
+										<button className="unselectable">
+											Transaction Dashboard
+										</button>
+									</Link>
 								</div>
 							) : session.user?.role === "manajer" ? (
 								<div className="flex space-x-10">
@@ -64,6 +74,11 @@ export default function Navbar() {
 									</Link>
 									<Link href="/transaksi" className="link-button">
 										<button className="unselectable">Manage Transaction</button>
+									</Link>
+									<Link href="/transaksi/dashboard" className="link-button">
+										<button className="unselectable">
+											Transaction Dashboard
+										</button>
 									</Link>
 								</div>
 							) : null

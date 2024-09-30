@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 
 export default function DateRangePicker() {
 	const [startDate, setStartDate] = useState("");
 	const [endDate, setEndDate] = useState("");
 	const router = useRouter();
-
+	const searchParams = useSearchParams();
+	const pathname = usePathname();
+	const isDashboardPath = pathname.startsWith("/transaksi/dashboard");
 	useEffect(() => {
 		if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
 			setEndDate(startDate);
@@ -15,17 +17,22 @@ export default function DateRangePicker() {
 	}, [startDate, endDate]);
 
 	useEffect(() => {
-		if (startDate && endDate) {
-			const query = new URLSearchParams({
-				start: startDate,
-				end: endDate,
-			}).toString();
-			router.push(`/transaksi/?${query}`);
-		} else {
-			router.push(`/transaksi/`);
-		}
-	}, [startDate, endDate, router]);
+		const params = new URLSearchParams(searchParams.toString());
 
+		if (startDate) {
+			params.set("start", startDate);
+		} else {
+			params.delete("start");
+		}
+
+		if (endDate) {
+			params.set("end", endDate);
+		} else {
+			params.delete("end");
+		}
+
+		router.push(`?${params.toString()}`);
+	}, [startDate, endDate, router, searchParams]);
 	const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newStartDate = e.target.value;
 		setStartDate(newStartDate);
@@ -38,12 +45,21 @@ export default function DateRangePicker() {
 		<div className="w-full max-w-5xl pb-4 rounded-lg items-center flex justify-end pr-4 flex-wrap">
 			<div className="w-full flex sm:flex-row sm:items-end justify-between space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex">
-					{startDate && endDate && (
-						<p className="mt-2 text-md text-secondary sm:ml-4">
-							Selected range:{" "}
-							<span className="font-medium pr-2">{startDate}</span> to{" "}
-							<span className="font-medium pl-2">{endDate}</span>
-						</p>
+					{!isDashboardPath && (
+						<>
+							{startDate && endDate ? (
+								<p className="mt-2 text-md text-secondary sm:ml-4">
+									Selected range:{" "}
+									<span className="font-medium pr-2">{startDate}</span> to{" "}
+									<span className="font-medium pl-2">{endDate}</span>
+								</p>
+							) : startDate ? (
+								<p className="mt-2 text-md text-secondary sm:ml-4">
+									Selected range:{" "}
+									<span className="font-medium pr-2">{startDate}</span>
+								</p>
+							) : null}
+						</>
 					)}
 				</div>
 				<div className="flex space-x-4">
