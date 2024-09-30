@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma, Status } from "@prisma/client";
-import { TransaksiType } from "../../../../types/transaksi";
+import { TransaksiType, TransaksiCount } from "../../../../types/transaksi";
 interface Session {
 	role: string;
 	id_user: string;
@@ -29,13 +29,24 @@ const filterTransaksiByRoleAndDate = async (
 	startDate?: string,
 	endDate?: string
 ) => {
-	if (startDate && endDate) {
+	if (startDate) {
+		const start = new Date(startDate);
+		let end: Date;
+
+		if (endDate && startDate !== endDate) {
+			end = new Date(endDate);
+			end.setDate(end.getDate() + 1);
+		} else {
+			end = new Date(startDate);
+			end.setDate(start.getDate() + 1);
+		}
+
 		baseQuery.where.AND = [
 			...(baseQuery.where.AND || []),
 			{
 				tgl_transaksi: {
-					gte: new Date(startDate),
-					lte: new Date(endDate),
+					gte: start,
+					lt: end,
 				},
 			},
 		];
@@ -101,6 +112,124 @@ export const getAllTransaksi = async (
 		startDate,
 		endDate
 	)) as unknown as TransaksiType[];
+};
+
+export const countTransaksiByDate = async (
+	session: Session,
+	startDate?: string,
+	endDate?: string
+): Promise<TransaksiCount[]> => {
+	const today = new Date();
+	const sevenDaysAgo = new Date();
+	sevenDaysAgo.setDate(today.getDate() - 7);
+
+	const finalStartDate = startDate || sevenDaysAgo.toISOString().split("T")[0];
+	const finalEndDate = endDate || today.toISOString().split("T")[0];
+
+	let result;
+
+	if (session.role === "kasir") {
+		result = await prisma.$queryRaw`
+            SELECT 
+                DATE(tgl_transaksi) AS transaksi_date, 
+                COUNT(id_transaksi) AS transaksi_count 
+            FROM 
+                "Transaksi" 
+            WHERE 
+                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+                AND id_user = ${session.id_user}
+            GROUP BY 
+                DATE(tgl_transaksi) 
+            ORDER BY 
+                transaksi_date ASC;
+        `;
+	} else {
+		result = await prisma.$queryRaw`
+            SELECT 
+                DATE(tgl_transaksi) AS transaksi_date, 
+                COUNT(id_transaksi) AS transaksi_count 
+            FROM 
+                "Transaksi" 
+            WHERE 
+                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+            GROUP BY 
+                DATE(tgl_transaksi) 
+            ORDER BY 
+                transaksi_date ASC;
+        `;
+	}
+
+	return result as TransaksiCount[];
+};
+
+export const SumTransaksiByDate = async (
+	session: Session,
+	startDate?: string,
+	endDate?: string
+): Promise<TransaksiCount[]> => {
+	const today = new Date();
+	const sevenDaysAgo = new Date();
+	sevenDaysAgo.setDate(today.getDate() - 7);
+
+	const finalStartDate = startDate || sevenDaysAgo.toISOString().split("T")[0];
+	const finalEndDate = endDate || today.toISOString().split("T")[0];
+
+	let result;
+
+	if (session.role === "kasir") {
+		result = await prisma.$queryRaw`
+            SELECT 
+				DATE(tgl_transaksi) AS transaksi_date, 
+				SUM(total) AS transaksi_penghasilan 
+            FROM 
+                "Transaksi" 
+            WHERE 
+                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+				AND status != 'belum_bayar'
+				AND id_user = ${session.id_user}
+            GROUP BY 
+                DATE(tgl_transaksi) 
+            ORDER BY 
+                transaksi_date ASC;
+        `;
+	} else {
+		result = await prisma.$queryRaw`
+            SELECT 
+				DATE(tgl_transaksi) AS transaksi_date, 
+				SUM(total) AS transaksi_penghasilan 
+            FROM 
+                "Transaksi" 
+            WHERE 
+                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+				AND status != 'belum_bayar'
+            GROUP BY 
+                DATE(tgl_transaksi) 
+            ORDER BY 
+                transaksi_date ASC;
+        `;
+	}
+
+	return result as TransaksiCount[];
+};
+
+export const sumAllTransaksi = async (session: Session) => {
+	const result = await prisma.transaksi.aggregate({
+		where: session.role === "kasir" ? { id_user: session.id_user } : {},
+		_sum: {
+			total: true,
+		},
+	});
+	return result._sum.total || 0;
+};
+
+export const countAllTransaksi = async (session: Session) => {
+	return await prisma.transaksi.count({
+		where: session.role === "kasir" ? { id_user: session.id_user } : {},
+	});
 };
 
 export const completeTransaction = async (

@@ -27,3 +27,9 @@ export type TransaksiType = {
 	Meja: MejaType;
 	User: UserType;
 };
+
+export type TransaksiCount = {
+	transaksi_date: string;
+	transaksi_count?: number;
+	transaksi_penghasilan?: number;
+};

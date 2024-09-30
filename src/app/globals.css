@@ -18,6 +18,10 @@
 	}
 }
 
+body {
+	background-color: #f6ebda;
+}
+
 .button-transition {
 	background-color: #ff902a;
 	color: white;
