@@ -218,7 +218,10 @@ export const SumTransaksiByDate = async (
 
 export const sumAllTransaksi = async (session: Session) => {
 	const result = await prisma.transaksi.aggregate({
-		where: session.role === "kasir" ? { id_user: session.id_user } : {},
+		where: {
+			...(session.role === "kasir" ? { id_user: session.id_user } : {}),
+			status: "lunas",
+		},
 		_sum: {
 			total: true,
 		},
@@ -228,7 +231,10 @@ export const sumAllTransaksi = async (session: Session) => {
 
 export const countAllTransaksi = async (session: Session) => {
 	return await prisma.transaksi.count({
-		where: session.role === "kasir" ? { id_user: session.id_user } : {},
+		where: {
+			...(session.role === "kasir" ? { id_user: session.id_user } : {}),
+			status: "lunas",
+		},
 	});
 };
 
