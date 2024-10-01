@@ -42,7 +42,7 @@ export default function DateRangePicker() {
 	};
 
 	return (
-		<div className="w-full max-w-5xl pb-4 rounded-lg items-center flex justify-end pr-4 flex-wrap">
+		<div className="w-full max-w-5xl pb-4 rounded-lg items-center flex justify-end flex-wrap">
 			<div className="w-full flex sm:flex-row sm:items-end justify-between space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex">
 					{!isDashboardPath && (

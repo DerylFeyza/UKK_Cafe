@@ -25,6 +25,7 @@ export const createTransaksi = async (
 
 const filterTransaksiByRoleAndDate = async (
 	session: Session,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	baseQuery: any,
 	startDate?: string,
 	endDate?: string
@@ -117,7 +118,8 @@ export const getAllTransaksi = async (
 export const countTransaksiByDate = async (
 	session: Session,
 	startDate?: string,
-	endDate?: string
+	endDate?: string,
+	user?: string
 ): Promise<TransaksiCount[]> => {
 	const today = new Date();
 	const sevenDaysAgo = new Date();
@@ -130,35 +132,38 @@ export const countTransaksiByDate = async (
 
 	if (session.role === "kasir") {
 		result = await prisma.$queryRaw`
-            SELECT 
-                DATE(tgl_transaksi) AS transaksi_date, 
-                COUNT(id_transaksi) AS transaksi_count 
-            FROM 
-                "Transaksi" 
-            WHERE 
-                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
-                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
-                AND id_user = ${session.id_user}
-            GROUP BY 
-                DATE(tgl_transaksi) 
-            ORDER BY 
-                transaksi_date ASC;
-        `;
+		SELECT 
+		  DATE(tgl_transaksi) AS transaksi_date, 
+		  COUNT(id_transaksi) AS transaksi_count 
+		FROM 
+		  "Transaksi" 
+		WHERE 
+		  DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+		  AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+		  AND status != 'belum_bayar'
+		  AND id_user = ${session.id_user}
+		GROUP BY 
+		  DATE(tgl_transaksi) 
+		ORDER BY 
+		  transaksi_date ASC;
+	  `;
 	} else {
 		result = await prisma.$queryRaw`
-            SELECT 
-                DATE(tgl_transaksi) AS transaksi_date, 
-                COUNT(id_transaksi) AS transaksi_count 
-            FROM 
-                "Transaksi" 
-            WHERE 
-                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
-                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
-            GROUP BY 
-                DATE(tgl_transaksi) 
-            ORDER BY 
-                transaksi_date ASC;
-        `;
+		SELECT 
+		  DATE(tgl_transaksi) AS transaksi_date, 
+		  COUNT(id_transaksi) AS transaksi_count 
+		FROM 
+		  "Transaksi" 
+		WHERE 
+		  DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+		  AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+		  AND status != 'belum_bayar'
+		  ${user ? Prisma.sql`AND id_user = ${user}` : Prisma.empty}
+		GROUP BY 
+		  DATE(tgl_transaksi) 
+		ORDER BY 
+		  transaksi_date ASC;
+	  `;
 	}
 
 	return result as TransaksiCount[];
@@ -167,7 +172,8 @@ export const countTransaksiByDate = async (
 export const SumTransaksiByDate = async (
 	session: Session,
 	startDate?: string,
-	endDate?: string
+	endDate?: string,
+	user?: string
 ): Promise<TransaksiCount[]> => {
 	const today = new Date();
 	const sevenDaysAgo = new Date();
@@ -180,37 +186,38 @@ export const SumTransaksiByDate = async (
 
 	if (session.role === "kasir") {
 		result = await prisma.$queryRaw`
-            SELECT 
-				DATE(tgl_transaksi) AS transaksi_date, 
-				SUM(total) AS transaksi_penghasilan 
-            FROM 
-                "Transaksi" 
-            WHERE 
-                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
-                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
-				AND status != 'belum_bayar'
-				AND id_user = ${session.id_user}
-            GROUP BY 
-                DATE(tgl_transaksi) 
-            ORDER BY 
-                transaksi_date ASC;
-        `;
+		SELECT 
+		  DATE(tgl_transaksi) AS transaksi_date, 
+		  SUM(total) AS transaksi_penghasilan 
+		FROM 
+		  "Transaksi" 
+		WHERE 
+		  DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+		  AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+		  AND status != 'belum_bayar'
+		  AND id_user = ${session.id_user}
+		GROUP BY 
+		  DATE(tgl_transaksi) 
+		ORDER BY 
+		  transaksi_date ASC;
+	  `;
 	} else {
 		result = await prisma.$queryRaw`
-            SELECT 
-				DATE(tgl_transaksi) AS transaksi_date, 
-				SUM(total) AS transaksi_penghasilan 
-            FROM 
-                "Transaksi" 
-            WHERE 
-                DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
-                AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
-				AND status != 'belum_bayar'
-            GROUP BY 
-                DATE(tgl_transaksi) 
-            ORDER BY 
-                transaksi_date ASC;
-        `;
+		SELECT 
+		  DATE(tgl_transaksi) AS transaksi_date, 
+		  SUM(total) AS transaksi_penghasilan 
+		FROM 
+		  "Transaksi" 
+		WHERE 
+		  DATE(tgl_transaksi) >= CAST(${finalStartDate} AS DATE) 
+		  AND DATE(tgl_transaksi) <= CAST(${finalEndDate} AS DATE)
+		  AND status != 'belum_bayar'
+		  ${user ? Prisma.sql`AND id_user = ${user}` : Prisma.empty}
+		GROUP BY 
+		  DATE(tgl_transaksi) 
+		ORDER BY 
+		  transaksi_date ASC;
+	  `;
 	}
 
 	return result as TransaksiCount[];

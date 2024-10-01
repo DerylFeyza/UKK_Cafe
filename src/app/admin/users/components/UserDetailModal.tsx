@@ -63,9 +63,12 @@ export default function UserDetailModal({
 		const result = await handleUpdateUser(initialData.id_user, formData);
 		handleToastResponse(result);
 
+		if (result.success) {
+			setIsModalOpen(false);
+		}
+
 		setIsPasswordVisible(false);
 		setPassword("");
-		setIsModalOpen(false);
 	};
 
 	return (

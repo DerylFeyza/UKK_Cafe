@@ -19,6 +19,22 @@ export const getAllUser = async () => {
 	});
 };
 
+export const getAllKasir = async () => {
+	return await prisma.user.findMany({
+		orderBy: {
+			createdAt: "asc",
+		},
+		where: {
+			role: "kasir",
+		},
+		select: {
+			id_user: true,
+			username: true,
+			nama_user: true,
+		},
+	});
+};
+
 export const findUser = async (where: Prisma.UserWhereUniqueInput) => {
 	return await prisma.user.findUnique({
 		where: {
