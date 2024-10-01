@@ -36,6 +36,14 @@ export const handleCreateUser = async (formData: FormData) => {
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil membuat user" };
 	} catch (error) {
+		//@ts-expect-error error type
+		if (error.code === "P2002") {
+			return {
+				success: false,
+				message:
+					"Username sudah terdaftar dalam aplikasi atau terdapat dalam transaksi",
+			};
+		}
 		return { success: false, message: "Gagal membuat user" };
 	}
 };
@@ -71,6 +79,14 @@ export const handleUpdateUser = async (id: string, formData: FormData) => {
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil mengupdate user" };
 	} catch (error) {
+		//@ts-expect-error error type
+		if (error.code === "P2002") {
+			return {
+				success: false,
+				message:
+					"Username sudah terdaftar dalam aplikasi atau terdapat dalam transaksi",
+			};
+		}
 		return { success: false, message: "Gagal mengupdate user" };
 	}
 };
