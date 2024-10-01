@@ -19,7 +19,7 @@ const BarChart = ({
 		labels: labels,
 		datasets: [
 			{
-				label: mode === "transaksi" ? "Jumlah Transaksi" : "Pendapatan",
+				label: mode === "pendapatan" ? "Pendapatan" : "Jumlah Transaksi",
 				data: dataCounts,
 				backgroundColor: ["rgba(255, 144, 42, 1)"],
 				borderWidth: 1,

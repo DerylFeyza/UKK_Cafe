@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 export default function ChartLayout({ mode }: { mode?: string }) {
 	const [activeMode, setActiveMode] = useState<string>(mode ?? "transaksi");
@@ -9,15 +9,8 @@ export default function ChartLayout({ mode }: { mode?: string }) {
 		setActiveMode(mode);
 		const params: URLSearchParams = new URLSearchParams();
 		params.set("mode", mode);
-
 		router.push(`?${params.toString()}`);
 	};
-
-	useEffect(() => {
-		if (!mode) {
-			router.push(`?mode=transaksi`);
-		}
-	}, [mode, router]);
 
 	return (
 		<div className="w-80 flex">
