@@ -17,32 +17,57 @@ export default function DateRangePicker() {
 	}, [startDate, endDate]);
 
 	useEffect(() => {
+		const startParam = searchParams.get("start");
+		const endParam = searchParams.get("end");
+		if (startParam) {
+			setStartDate(startParam);
+		} else {
+			setStartDate("");
+		}
+		if (endParam) {
+			setEndDate(endParam);
+		} else {
+			setEndDate("");
+		}
+	}, [searchParams]);
+
+	const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newStartDate = e.target.value;
 		const params = new URLSearchParams(searchParams.toString());
 
-		if (startDate) {
-			params.set("start", startDate);
+		setStartDate(newStartDate);
+
+		if (endDate && new Date(endDate) < new Date(newStartDate)) {
+			setEndDate(newStartDate);
+			params.set("end", newStartDate);
+		}
+
+		if (newStartDate) {
+			params.set("start", newStartDate);
 		} else {
 			params.delete("start");
 		}
 
-		if (endDate) {
-			params.set("end", endDate);
+		router.push(`?${params.toString()}`);
+	};
+
+	const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newEndDate = e.target.value;
+		const params = new URLSearchParams(searchParams.toString());
+
+		setEndDate(newEndDate);
+
+		if (newEndDate) {
+			params.set("end", newEndDate);
 		} else {
 			params.delete("end");
 		}
 
 		router.push(`?${params.toString()}`);
-	}, [startDate, endDate, router, searchParams]);
-	const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const newStartDate = e.target.value;
-		setStartDate(newStartDate);
-		if (endDate && new Date(endDate) < new Date(newStartDate)) {
-			setEndDate(newStartDate);
-		}
 	};
 
 	return (
-		<div className="w-full max-w-5xl pb-4 rounded-lg items-center flex justify-end flex-wrap">
+		<div className="w-full max-w-5xl rounded-lg items-center flex justify-end flex-wrap">
 			<div className="w-full flex sm:flex-row sm:items-end justify-between space-y-4 sm:space-y-0 sm:space-x-4">
 				<div className="flex">
 					{!isDashboardPath && (
@@ -90,7 +115,7 @@ export default function DateRangePicker() {
 							id="end-date"
 							value={endDate}
 							min={startDate}
-							onChange={(e) => setEndDate(e.target.value)}
+							onChange={handleEndDateChange}
 							className="w-full px-3 py-2 bg-tertiary border-2 border-primary text-secondary rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
 						/>
 					</div>

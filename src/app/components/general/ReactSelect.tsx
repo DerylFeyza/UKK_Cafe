@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Select from "react-select";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -11,17 +12,25 @@ interface dataSelect {
 export default function ReactSelect({ data }: { data: dataSelect[] }) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const [selectedOption, setSelectedOption] = useState<dataSelect | null>(null);
 
-	const handleChange = (selectedOption: dataSelect | null) => {
+	useEffect(() => {
+		const userParam = searchParams.get("user");
+		const selected = data.find((option) => option.value === userParam) || null;
+		setSelectedOption(selected);
+	}, [searchParams, data]);
+
+	const handleChange = (option: dataSelect | null) => {
 		const params = new URLSearchParams(searchParams.toString());
 
-		if (selectedOption) {
-			params.set("user", selectedOption.value);
+		if (option) {
+			params.set("user", option.value);
 		} else {
 			params.delete("user");
 		}
 
 		router.push(`?${params.toString()}`);
+		setSelectedOption(option);
 	};
 
 	return (
@@ -37,6 +46,7 @@ export default function ReactSelect({ data }: { data: dataSelect[] }) {
 				name="user"
 				options={data}
 				onChange={handleChange}
+				value={selectedOption}
 			/>
 			<div
 				style={{

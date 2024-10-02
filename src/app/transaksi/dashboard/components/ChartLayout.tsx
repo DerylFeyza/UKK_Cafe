@@ -7,9 +7,9 @@ export default function ChartLayout({ mode }: { mode?: string }) {
 
 	const handlemodeFilter = (mode: string) => {
 		setActiveMode(mode);
-		const params: URLSearchParams = new URLSearchParams();
+		const params: URLSearchParams = new URLSearchParams(window.location.search);
 		params.set("mode", mode);
-		router.push(`?${params.toString()}`);
+		router.push(`${window.location.pathname}?${params.toString()}`);
 	};
 
 	return (

@@ -19,11 +19,13 @@ export default function AddUserForm() {
 		formData.append("password", password);
 
 		const result = await handleCreateUser(formData);
+		if (result.success) {
+			setNamaUser("");
+			setRole("");
+			setUsername("");
+			setPassword("");
+		}
 
-		setNamaUser("");
-		setRole("");
-		setUsername("");
-		setPassword("");
 		handleToastResponse(result);
 	};
 

@@ -33,7 +33,9 @@ export default function TransaksiManagePage({
 					/>
 				</div>
 				<div className="w-4/5">
-					<DateRangePicker />
+					<div className="pb-4">
+						<DateRangePicker />
+					</div>
 
 					<div className="flex gap-4 flex-wrap max-h-[72vh] overflow-y-auto mr-24 sm:mr-12 md:mr-16 lg:mr-20 xl:mr-24">
 						{displayedTransaksi.map((transaksi) => (

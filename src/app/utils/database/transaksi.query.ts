@@ -245,6 +245,15 @@ export const countAllTransaksi = async (session: Session) => {
 	});
 };
 
+export const countAllUncompleteTransaksi = async (session: Session) => {
+	return await prisma.transaksi.count({
+		where: {
+			...(session.role === "kasir" ? { id_user: session.id_user } : {}),
+			status: "belum_bayar",
+		},
+	});
+};
+
 export const completeTransaction = async (
 	where: Prisma.TransaksiWhereUniqueInput
 ) => {

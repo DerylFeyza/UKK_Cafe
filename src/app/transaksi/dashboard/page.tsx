@@ -3,16 +3,19 @@ import {
 	countTransaksiByDate,
 	SumTransaksiByDate,
 	countAllTransaksi,
+	countAllUncompleteTransaksi,
 	sumAllTransaksi,
 } from "@/app/utils/database/transaksi.query";
 import { getAllKasir } from "@/app/utils/database/user.query";
 import DateRangePicker from "@/app/components/general/DateRangePicker";
+import ReactSelect from "@/app/components/general/ReactSelect";
+import ClearFilterButton from "./components/ClearFilterButton";
 import { nextGetServerSession } from "@/lib/next-auth";
 import { TransaksiCount } from "../../../../types/transaksi";
 import ChartLayout from "./components/ChartLayout";
 import { UserSelect } from "../../../../types/user";
-import ReactSelect from "@/app/components/general/ReactSelect";
 import { Suspense } from "react";
+
 export default async function TransactionDashboard({
 	searchParams,
 }: {
@@ -22,6 +25,7 @@ export default async function TransactionDashboard({
 	let labels: string[] = [];
 	let dataCounts: number[] = [];
 	let allTransaksiCount: number = 0;
+	let allUncompleteTransaksiCount: number = 0;
 	let allTransaksiSum: number = 0;
 	let dataTransaksi: TransaksiCount[] = [];
 	let dataKasir: UserSelect[] = [];
@@ -55,6 +59,9 @@ export default async function TransactionDashboard({
 			});
 		});
 		allTransaksiCount = await countAllTransaksi(session.user);
+		allUncompleteTransaksiCount = await countAllUncompleteTransaksi(
+			session.user
+		);
 		allTransaksiSum = await sumAllTransaksi(session.user);
 		dataKasir = await getAllKasir();
 	}
@@ -69,7 +76,10 @@ export default async function TransactionDashboard({
 			<div className="max-w-8xl flex flex-col lg:flex-row lg:flex-wrap">
 				<div className="lg:w-3/5 w-full lg:pr-4">
 					<div className="max-w-[90%] mb-4 flex flex-wrap justify-between pl-20 ">
-						<DateRangePicker />
+						<div className="flex justify-between w-full items-end space-x-2 pb-4 h-20">
+							<ClearFilterButton />
+							<DateRangePicker />
+						</div>
 						{session?.user?.role !== "kasir" && (
 							<ReactSelect data={transformedUsers} />
 						)}
@@ -91,6 +101,12 @@ export default async function TransactionDashboard({
 					<div className="relative space-y-10 mb-4 lg:pl-20">
 						<div className="w-96 h-60 flex flex-col items-center justify-center rounded-full text-2xl font-bold text-secondary bg-white shadow-lg">
 							<span className="w-full text-center">
+								{new Intl.NumberFormat("id-ID").format(
+									allUncompleteTransaksiCount
+								)}
+							</span>
+							<span className="text-center">Transaksi Belum Dibayar</span>
+							<span className="w-full text-center pt-8">
 								{new Intl.NumberFormat("id-ID").format(allTransaksiCount)}
 							</span>
 							<span className="text-center">Transaksi Berhasil</span>
