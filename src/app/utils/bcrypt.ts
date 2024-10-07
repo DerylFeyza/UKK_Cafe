@@ -1,4 +1,4 @@
-import { compare, hash } from "bcrypt";
+import { compare, hash } from "bcryptjs";
 
 const BCRYPT_ROUNDS = 3;
 
