@@ -35,8 +35,8 @@ model Transaksi {
   status         Status
   total          Int
 
-  User            User              @relation(fields: [id_user], references: [id_user])
-  Meja            Meja              @relation(fields: [id_meja], references: [id_meja])
+  User            User              @relation(fields: [id_user], references: [id_user], onDelete: Cascade)
+  Meja            Meja              @relation(fields: [id_meja], references: [id_meja], onDelete: Cascade)
   DetailTransaksi DetailTransaksi[]
 }
 
@@ -47,8 +47,8 @@ model DetailTransaksi {
   jumlah              Int
   harga               Int
 
-  Transaksi Transaksi @relation(fields: [id_transaksi], references: [id_transaksi])
-  Menu      Menu      @relation(fields: [id_menu], references: [id_menu])
+  Transaksi Transaksi @relation(fields: [id_transaksi], references: [id_transaksi], onDelete: Cascade)
+  Menu      Menu      @relation(fields: [id_menu], references: [id_menu], onDelete: Cascade)
 }
 
 model Menu {

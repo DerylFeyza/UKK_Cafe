@@ -2,22 +2,24 @@ import AddUserForm from "./components/AddUserForm";
 import FilterLayout from "./components/FilterLayout";
 import { getAllUser, findFilteredUser } from "@/app/utils/database/user.query";
 import UserCard from "./components/UserCard";
-import { User } from "@prisma/client";
 import { Role } from "@prisma/client";
+import { UserWithTransaksiCount } from "../../../../types/user";
 import { Suspense } from "react";
 export default async function Users({
 	searchParams,
 }: {
-	searchParams: { keyword: string; role: string };
+	searchParams: { keyword: string; role: string; showDeleted: string };
 }) {
-	let users: User[];
-	if (searchParams.keyword || searchParams.role) {
+	let users: UserWithTransaksiCount[];
+	if (searchParams.keyword || searchParams.role || searchParams.showDeleted) {
 		users = await findFilteredUser({
 			username: searchParams.keyword,
 			nama_user: searchParams.keyword,
 			role: searchParams.role as Role,
+			isDeleted: searchParams.showDeleted ? true : false,
 		});
 	} else {
+		// @ts-expect-error non deleted user dont need transaksi count
 		users = await getAllUser();
 	}
 	return (
@@ -32,7 +34,10 @@ export default async function Users({
 						{users &&
 							users.map((user) => (
 								<div className="pb-4 pr-4" key={user.id_user}>
-									<UserCard userData={user} />
+									<UserCard
+										userData={user}
+										showDeleted={searchParams.showDeleted}
+									/>
 								</div>
 							))}
 					</div>

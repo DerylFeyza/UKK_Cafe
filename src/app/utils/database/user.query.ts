@@ -1,11 +1,12 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { Role } from "@prisma/client";
-
+import { UserWithTransaksiCount } from "../../../../types/user";
 interface UserDataType {
 	username: string;
 	role: Role;
 	nama_user: string;
+	isDeleted: boolean;
 }
 
 export const getAllUser = async () => {
@@ -50,10 +51,15 @@ export const findAllUser = async (where: Prisma.UserWhereInput) => {
 			...where,
 			isDeleted: false,
 		},
+		include: {
+			_count: {
+				select: { Transaksi: true },
+			},
+		},
 	});
 };
 export const findFilteredUser = async (where: UserDataType) => {
-	return await prisma.user.findMany({
+	return (await prisma.user.findMany({
 		// @ts-expect-error idkman
 		where: {
 			...(where.username
@@ -69,9 +75,14 @@ export const findFilteredUser = async (where: UserDataType) => {
 				  }
 				: {}),
 			role: where.role ? where.role : undefined,
-			isDeleted: false,
+			isDeleted: where.isDeleted ? where.isDeleted : false,
 		},
-	});
+		include: {
+			_count: {
+				select: { Transaksi: true },
+			},
+		},
+	})) as UserWithTransaksiCount[];
 };
 
 export const createUser = async (data: Prisma.UserCreateInput) => {
@@ -90,4 +101,8 @@ export const updateUser = async (
 
 export const deleteUser = async (where: Prisma.UserWhereUniqueInput) => {
 	return await prisma.user.update({ where, data: { isDeleted: true } });
+};
+
+export const hardDeleteuser = async (where: Prisma.UserWhereUniqueInput) => {
+	return await prisma.user.delete({ where });
 };

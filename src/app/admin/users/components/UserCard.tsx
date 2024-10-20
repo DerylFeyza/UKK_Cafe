@@ -1,9 +1,17 @@
 "use client";
-import { User } from "@prisma/client";
+import { UserWithTransaksiCount } from "../../../../../types/user";
 import UserDetailModal from "./UserDetailModal";
+import HardDeleteNotifs from "@/app/components/general/HardDeleteNotifs";
 import { useState } from "react";
-export default function UserCard({ userData }: { userData: User }) {
+export default function UserCard({
+	userData,
+	showDeleted,
+}: {
+	userData: UserWithTransaksiCount;
+	showDeleted?: string;
+}) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
 
 	return (
 		<div>
@@ -18,13 +26,21 @@ export default function UserCard({ userData }: { userData: User }) {
 					<div>
 						<div className="font-bold text-x text-primary flex items-center justify-between">
 							{userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}
-							<button
-								className="button-transition rounded-full px-4 py-2 flex items-center space-x-2"
-								aria-label="Add to cart"
-								onClick={() => setIsModalOpen(true)}
-							>
-								<span className="font-semibold">Details</span>
-							</button>
+							{showDeleted ? (
+								<button
+									className="button-transition rounded-full px-4 py-2 flex items-center space-x-2"
+									onClick={() => setIsNotifModalOpen(true)}
+								>
+									<span className="font-semibold">Hard Delete</span>
+								</button>
+							) : (
+								<button
+									className="button-transition rounded-full px-4 py-2 flex items-center space-x-2"
+									onClick={() => setIsModalOpen(true)}
+								>
+									<span className="font-semibold">Details</span>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
@@ -33,6 +49,11 @@ export default function UserCard({ userData }: { userData: User }) {
 				isModalOpen={isModalOpen}
 				setIsModalOpen={setIsModalOpen}
 				initialData={userData}
+			/>
+			<HardDeleteNotifs
+				isNotifModalOpen={isNotifModalOpen}
+				setIsNotifModalOpen={setIsNotifModalOpen}
+				userData={userData}
 			/>
 		</div>
 	);

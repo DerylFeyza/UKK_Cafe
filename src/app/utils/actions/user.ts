@@ -1,9 +1,15 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { createUser, updateUser, deleteUser } from "../database/user.query";
+import {
+	createUser,
+	updateUser,
+	deleteUser,
+	hardDeleteuser,
+} from "../database/user.query";
 import { Role } from "@prisma/client";
 import { encrypt } from "../bcrypt";
 import { createUserSchema, updateUserSchema } from "@/lib/validator/user";
+import { nextGetServerSession } from "@/lib/next-auth";
 
 interface userField {
 	nama_user: string;
@@ -93,10 +99,25 @@ export const handleUpdateUser = async (id: string, formData: FormData) => {
 
 export const handleDeleteUser = async (id: string) => {
 	try {
+		const session = await nextGetServerSession();
+		if (session?.user?.id_user === id) {
+			return { success: false, message: "you cannot delete yourself" };
+		}
+
 		await deleteUser({ id_user: id });
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil menghapus user" };
 	} catch (error) {
 		return { success: false, message: "Gagall menghapus user" };
+	}
+};
+
+export const handleHardDeleteUser = async (id: string) => {
+	try {
+		await hardDeleteuser({ id_user: id });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menghapus user" };
+	} catch (error) {
+		return { success: false, message: "Gagal menghapus user" };
 	}
 };
