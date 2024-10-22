@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
-
+import { MejaWithTransaksiCount } from "../../../../types/meja";
 export const getAllMeja = async () =>
 	await prisma.meja.findMany({
 		where: {
@@ -9,12 +9,17 @@ export const getAllMeja = async () =>
 	});
 
 export const findAllMeja = async (where: Prisma.MejaWhereInput) =>
-	await prisma.meja.findMany({
+	(await prisma.meja.findMany({
 		where: {
 			...where,
-			isDeleted: false,
+			isDeleted: where.isDeleted ? where.isDeleted : false,
 		},
-	});
+		include: {
+			_count: {
+				select: { Transaksi: true },
+			},
+		},
+	})) as MejaWithTransaksiCount[];
 
 export const findMeja = async (where: Prisma.MejaWhereUniqueInput) => {
 	return await prisma.meja.findUnique({
@@ -38,6 +43,14 @@ export const updateMeja = async (
 		data,
 	});
 };
+
+export const restoreMeja = async (where: Prisma.MejaWhereUniqueInput) => {
+	return await prisma.meja.update({ where, data: { isDeleted: false } });
+};
 export const deleteMeja = async (where: Prisma.MejaWhereUniqueInput) => {
 	return await prisma.meja.update({ where, data: { isDeleted: true } });
+};
+
+export const hardDeleteMeja = async (where: Prisma.MejaWhereUniqueInput) => {
+	return await prisma.meja.delete({ where });
 };

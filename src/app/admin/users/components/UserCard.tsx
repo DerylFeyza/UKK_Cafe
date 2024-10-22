@@ -1,7 +1,7 @@
 "use client";
 import { UserWithTransaksiCount } from "../../../../../types/user";
 import UserDetailModal from "./UserDetailModal";
-import HardDeleteNotifs from "@/app/components/general/HardDeleteNotifs";
+import HardDeleteNotifs from "@/app/admin/users/components/HardDeleteNotifs";
 import { useState } from "react";
 export default function UserCard({
 	userData,

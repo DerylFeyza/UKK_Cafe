@@ -1,6 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { createMeja, deleteMeja, updateMeja } from "../database/meja.query";
+import {
+	createMeja,
+	deleteMeja,
+	updateMeja,
+	hardDeleteMeja,
+	restoreMeja,
+} from "../database/meja.query";
 import { MejaFormSchema } from "@/lib/validator/meja";
 export const handleCreateMeja = async (no_meja: string) => {
 	try {
@@ -18,6 +24,14 @@ export const handleCreateMeja = async (no_meja: string) => {
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil menambahkan meja" };
 	} catch (error) {
+		//@ts-expect-error error type
+		if (error.code === "P2002") {
+			return {
+				success: false,
+				message:
+					"Meja sudah terdaftar dalam aplikasi atau terdapat dalam transaksi",
+			};
+		}
 		return { success: false, message: "Gagal menambahkan meja" };
 	}
 };
@@ -38,13 +52,41 @@ export const handleUpdateMeja = async (id_meja: string, nomor_meja: string) => {
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil memperbarui nomor meja" };
 	} catch (error) {
+		//@ts-expect-error error type
+		if (error.code === "P2002") {
+			return {
+				success: false,
+				message:
+					"Meja sudah terdaftar dalam aplikasi atau terdapat dalam transaksi",
+			};
+		}
 		return { success: false, message: "Gagal memperbarui nomor meja" };
+	}
+};
+
+export const handleRestoreMeja = async (id_meja: string) => {
+	try {
+		await restoreMeja({ id_meja });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil restore meja" };
+	} catch (error) {
+		return { success: false, message: "Gagal restore meja" };
 	}
 };
 
 export const handleDeleteMeja = async (id_meja: string) => {
 	try {
 		await deleteMeja({ id_meja });
+		revalidatePath("/", "layout");
+		return { success: true, message: "Berhasil menghapus meja" };
+	} catch (error) {
+		return { success: false, message: "Gagal menghapus meja" };
+	}
+};
+
+export const handleHardDeleteMeja = async (id_meja: string) => {
+	try {
+		await hardDeleteMeja({ id_meja });
 		revalidatePath("/", "layout");
 		return { success: true, message: "Berhasil menghapus meja" };
 	} catch (error) {

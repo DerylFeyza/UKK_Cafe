@@ -1,8 +1,8 @@
 "use client";
 import { X } from "lucide-react";
-import { UserWithTransaksiCount } from "../../../../types/user";
+import { UserWithTransaksiCount } from "../../../../../types/user";
 import { handleHardDeleteUser } from "@/app/utils/actions/user";
-import { handleToastResponse } from "./ToastNotification";
+import { handleToastResponse } from "../../../components/general/ToastNotification";
 export default function HardDeleteNotifs({
 	isNotifModalOpen,
 	setIsNotifModalOpen,
