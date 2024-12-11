@@ -1,11 +1,13 @@
 import { authOptions } from "@/lib/next-auth";
 import { getServerSession } from "next-auth";
+import PushNotifs from "./components/PushNotifs";
 import Coffee from "@/../public/assets/coffee.jpg";
 import Image from "next/image";
 export default async function Home() {
 	const session = await getServerSession(authOptions);
 	return (
 		<div className="flex min-h-screen bg-background">
+			<PushNotifs />
 			<div className="flex flex-col justify-center w-3/5 p-12 md:p-24 lg:p-36">
 				<h1 className="text-5xl font-bold mb-4">
 					Welcome!
